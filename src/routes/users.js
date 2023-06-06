@@ -79,7 +79,6 @@ async function users(fastify) {
 
 	fastify.delete("/users/:id", { preHandler: await requireRole(["ADMIN"]) }, async (request, reply) => {
 		const user = await usersController.deleteUser(request.params.id);
-		console.log(user);
 		if (!user) {
 			reply.status(404).send({ error: "User not found" });
 		} else {

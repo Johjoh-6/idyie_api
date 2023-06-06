@@ -43,6 +43,27 @@ async function auth(fastify) {
 			reply.status(400).send({ error: error.message });
 		}
 	});
+
+    fastify.post("/logout", async (request, reply) => {
+        try {
+            const token = request.cookies.authToken;
+            const clear = await authController.logout(token);
+            if(!clear) {
+                reply.status(401).send({ error: "Unauthorized" });
+                return;
+            }
+            reply.clearCookie('authToken', {
+                httpOnly: true,
+                secure: env.ENV === 'production',
+                path: '/',
+                sameSite: 'strict',
+            });
+            reply.status(200).send({ message: 'User logged out' });
+        } catch (error) {
+            console.error(error);
+            reply.status(400).send({ error: error.message });
+        }
+    });
 }
 
 module.exports = auth;
