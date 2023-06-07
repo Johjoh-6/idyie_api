@@ -3,7 +3,7 @@ class CategorieController {
         this.client = dbClient;
     }
 
-    async getAllCategories() {
+    async getAllCategorie() {
         const { rows } = await this.client.query('SELECT * FROM categorie ORDER BY id ASC');
         return rows;
     }
@@ -19,9 +19,15 @@ class CategorieController {
     }
 
     async createCategorie(name, parent = null) {
-        const  exist  = await this.client.query('SELECT * FROM categorie WHERE name=$1', [id]);
+        const  exist  = await this.client.query('SELECT * FROM categorie WHERE name=$1', [name]);
         if (exist.rowCount > 0) {
             throw new Error("Categorie already exist");
+        }
+        if(parent != null) {
+            const  existParent  = await this.client.query('SELECT * FROM categorie WHERE id=$1', [parent]);
+            if (existParent.rowCount === 0) {
+                throw new Error("Parent categorie not exist");
+            }
         }
         const { rows } = await this.client.query('INSERT INTO categorie (name, id_category_parent) VALUES ($1, $2) RETURNING *', [name, parent])
         return rows;
