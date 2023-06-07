@@ -34,7 +34,7 @@ async function tutorial(fastify) {
             const tutorial = await tutorialController.createTutorial(id_users, id_category, title, content, view_count, durate);
             const tutorials = tutorial[0];
             reply.status(201);
-            return reply.send(tutorials);
+            reply.send(tutorials);
         }
     );
 

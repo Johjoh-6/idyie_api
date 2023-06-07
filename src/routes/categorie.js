@@ -27,33 +27,33 @@ async function categorie(fastify) {
 
     fastify.post(
         "/categorie",
-        { schema: createCategorieSchema, preHandler: await requireRole(['ADMIN', 'MODERATOR'])},
+        { schema: createCategorieSchema, preHandler: requireRole(['ADMIN', 'MODERATOR'], client)},
         async (request, reply) => {
             const { name, parent } = request.body;
             const categorie = await categorieController.createCategorie(name, parent);
             const categories = categorie[0];
             reply.status(201);
-            return reply.send(categories);
+            reply.send(categories);
         }
     );
 
     fastify.put(
         "/categorie/:id",
-        { schema: updateCategorieSchema, preHandler: await requireRole(['ADMIN', 'MODERATOR']) },
+        { schema: updateCategorieSchema, preHandler: requireRole(['ADMIN', 'MODERATOR'], client) },
         async (request, reply) => {
             const { name, parent } = request.body;
             const categorie = await categorieController.updateCategorie(request.params.id, name, parent);
             const categories = categorie[0];
             reply.status(200);
-            return reply.send(categories);
+            reply.send(categories);
         }
     );
 
     fastify.delete(
-        "/categorie/:id", { preHandler: await requireRole(['ADMIN']) },async (request, reply) => {
+        "/categorie/:id", { preHandler: requireRole(['USER','ADMIN'], client) },async (request, reply) => {
             const categorie = await categorieController.deleteCategorie(request.params.id);
             reply.status(204);
-            return reply.send(categorie);
+            reply.send(categorie);
         }
     );
 

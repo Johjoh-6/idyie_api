@@ -13,7 +13,7 @@ class UsersController {
 
     async getUser(id) {
         const { rows } = await this.client.query('SELECT * FROM users WHERE id=$1', [id])
-        return rows;
+        return rows[0];
     }
 
     async createUser(username, f_name, l_name, email, password, role, avatar) {

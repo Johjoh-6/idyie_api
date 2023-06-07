@@ -9,7 +9,7 @@ async function users(fastify) {
 
 	fastify.get(
 		"/users",
-		{ schema: getAllUserSchema, preHandler: await requireRole(["ADMIN", "MODERATOR"]) },
+		{ schema: getAllUserSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
 			const users = await usersController.getAllUsers();
 			reply.send(users);
@@ -18,31 +18,31 @@ async function users(fastify) {
 
 	fastify.get(
 		"/users/:id",
-		{ schema: getUserSchema, preHandler: await requireRole(["ADMIN", "MODERATOR"]) },
+		{ schema: getUserSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
 			const users = await usersController.getUser(request.params.id);
 			reply.send(users);
 		},
 	);
-	fastify.get("/users/me", { preHandler: await checkSelfOrAdmin() }, async (request, reply) => {
+	fastify.get("/users/me", { preHandler: checkSelfOrAdmin() }, async (request, reply) => {
 		const users = await usersController.getUser(request.user.id);
 		reply.send(users);
 	});
 	fastify.post(
 		"/users",
-		{ schema: createUserSchema, preHandler: await requireRole(["ADMIN"]) },
+		{ schema: createUserSchema, preHandler: requireRole(["ADMIN"], client) },
 		async (request, reply) => {
 			const { username, f_name, l_name, email, password, role, avatar } = request.body;
 			const users = await usersController.createUser(username, f_name, l_name, email, password, role, avatar);
 			const user = users[0];
 			reply.status(201);
-			return reply.send(user);
+			reply.send(user);
 		},
 	);
 
 	fastify.put(
 		"/users/:id",
-		{ schema: updateUserSchema, preHandler: await requireRole(["ADMIN", "MODERATOR"]) },
+		{ schema: updateUserSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
 			const { username, f_name, l_name, email, password, role, avatar } = request.body;
 			const users = await usersController.updateUser(
@@ -57,10 +57,10 @@ async function users(fastify) {
 			);
 			const user = users[0];
 			reply.status(200);
-			return reply.send(user);
+			reply.send(user);
 		},
 	);
-	fastify.put("/users/me", { preHandler: await checkSelfOrAdmin() }, async (request, reply) => {
+	fastify.put("/users/me", { preHandler: checkSelfOrAdmin() }, async (request, reply) => {
 		const { username, f_name, l_name, email, password, role, avatar } = request.body;
 		const users = await usersController.updateUser(
 			request.user.id,
@@ -74,10 +74,10 @@ async function users(fastify) {
 		);
 		const user = users[0];
 		reply.status(200);
-		return reply.send(user);
+		reply.send(user);
 	});
 
-	fastify.delete("/users/:id", { preHandler: await requireRole(["ADMIN"]) }, async (request, reply) => {
+	fastify.delete("/users/:id", { preHandler: requireRole(["ADMIN"], client) }, async (request, reply) => {
 		const user = await usersController.deleteUser(request.params.id);
 		if (!user) {
 			reply.status(404).send({ error: "User not found" });
