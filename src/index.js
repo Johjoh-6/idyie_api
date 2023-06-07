@@ -8,7 +8,10 @@ const fastify = require("fastify")({
 const dbconnector = require("./db");
 const route = require("./routes");
 const cookiePlugin = require('@fastify/cookie');
+const middie = require('@fastify/middie');
 
+
+fastify.register(middie);
 fastify.register(dbconnector);
 fastify.register(route);
 fastify.register(cookiePlugin, {

@@ -21,8 +21,10 @@
   "homepage": "https://github.com/Johjoh-6/idyie_api#readme",
   "dependencies": {
     "@fastify/cookie": "^8.3.0",
+    "@fastify/middie": "^8.3.0",
     "@fastify/postgres": "^5.2.0",
     "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
     "fastify": "^4.17.0",
     "fastify-postgres": "^3.7.0",
     "jsonwebtoken": "^9.0.0",
