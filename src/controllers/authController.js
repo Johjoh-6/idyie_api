@@ -1,4 +1,3 @@
-const UsersController = require("./usersController");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const hashPassword = require("../utils/hashPaswword");
