@@ -66,6 +66,17 @@ class AuthController {
 		return token;
 	}
 
+	async flushExpiredTokens() {
+		const flush = await this.client.query("DELETE FROM jwt_tokens WHERE expiration < NOW() RETURNING *");
+		return flush.rowCount == 0;
+	}
+
+	async flushAllTokens() {
+		const flush =  await this.client.query("DELETE FROM jwt_tokens RETURNING *");
+		return flush.rowCount == 0;
+	}
+
+
 }
 
 module.exports = AuthController;

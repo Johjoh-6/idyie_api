@@ -1,4 +1,5 @@
 const AuthController = require("../controllers/authController");
+const requireRole = require("../middlewares/requiredRole");
 const env = require("dotenv").config().parsed;
 
 async function auth(fastify) {
@@ -59,6 +60,33 @@ async function auth(fastify) {
                 sameSite: 'strict',
             });
             reply.status(200).send({ message: 'User logged out' });
+        } catch (error) {
+            console.error(error);
+            reply.status(400).send({ error: error.message });
+        }
+    });
+
+    fastify.get("/flush", {preHandler: requireRole(['ADMIN'], client)} ,async (request, reply) => {
+        try {
+            const clear = await authController.flushExpiredTokens();
+            if(!clear) {
+                reply.status(401).send({ error: "Unauthorized" });
+                return;
+            }
+            reply.status(200).send({ message: 'Flushed' });
+        } catch (error) {
+            console.error(error);
+            reply.status(400).send({ error: error.message });
+        }
+    });
+    fastify.get("/flush_all", {preHandler: requireRole(['ADMIN'], client)} ,async (request, reply) => {
+        try {
+            const clear = await authController.flushAllTokens();
+            if(!clear) {
+                reply.status(401).send({ error: "Unauthorized" });
+                return;
+            }
+            reply.status(200).send({ message: 'Flushed' });
         } catch (error) {
             console.error(error);
             reply.status(400).send({ error: error.message });
