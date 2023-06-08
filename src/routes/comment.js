@@ -1,6 +1,5 @@
 const CommentController = require("../controllers/commentController");
 const requireRole = require("../middlewares/requiredRole");
-const checkSelfOrAdmin = require("../middlewares/checkSelfOrAdmin");
 const createSchemas = require('../models/comment.model');
 
 async function comment(fastify) {
@@ -61,7 +60,7 @@ async function comment(fastify) {
 
     fastify.put(
         "/comment/:id",
-        { schema: updateCommentSchema, preHandler: checkSelfOrAdmin(client) },
+        { schema: updateCommentSchema },
         async (request, reply) => {
             const { content } = request.body;
             const comment = await commentController.updateComment(request.params.id, content);
@@ -71,7 +70,6 @@ async function comment(fastify) {
 
     fastify.delete(
         "/comment/:id",
-        { preHandler: checkSelfOrAdmin(client) },
         async (request, reply) => {
             const comment = await commentController.deleteComment(request.params.id);
             reply.send(comment);

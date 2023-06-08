@@ -1,6 +1,5 @@
 const TutorialController = require("../controllers/tutorialController");
 const requireRole = require("../middlewares/requiredRole");
-const checkSelfOrAdmin = require("../middlewares/checkSelfOrAdmin");
 const { getAllTutorialSchema, getTutorialSchema, createTutorialSchema, updateTutorialSchema } = require("../models/tutorial.model");
 
 async function tutorial(fastify) {
@@ -37,6 +36,9 @@ async function tutorial(fastify) {
             reply.send(tutorials);
         }
     );
+
+    // TODO: update tutorial
+    // TODO : delete tutorial
 
 	
 }

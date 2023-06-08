@@ -1,6 +1,5 @@
 const UsersController = require("../controllers/usersController");
 const requireRole = require("../middlewares/requiredRole");
-const checkSelfOrAdmin = require("../middlewares/checkSelfOrAdmin");
 const { getAllUserSchema, getUserSchema, createUserSchema, updateUserSchema } = require("../models/user.model");
 
 async function users(fastify) {
@@ -24,7 +23,8 @@ async function users(fastify) {
 			reply.send(users);
 		},
 	);
-	fastify.get("/users/me", { preHandler: checkSelfOrAdmin() }, async (request, reply) => {
+	fastify.get("/users/me",  async (request, reply) => {
+		const id_user = request.userId;
 		const users = await usersController.getUser(request.user.id);
 		reply.send(users);
 	});
@@ -60,10 +60,11 @@ async function users(fastify) {
 			reply.send(user);
 		},
 	);
-	fastify.put("/users/me", { preHandler: checkSelfOrAdmin() }, async (request, reply) => {
+	fastify.put("/users/me", async (request, reply) => {
 		const { username, f_name, l_name, email, password, role, avatar } = request.body;
+		const id_user = request.userId;
 		const users = await usersController.updateUser(
-			request.user.id,
+			id_user,
 			username,
 			f_name,
 			l_name,

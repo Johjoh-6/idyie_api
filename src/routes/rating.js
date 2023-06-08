@@ -1,6 +1,5 @@
 const RatingController = require("../controllers/ratingController");
 const requireRole = require("../middlewares/requiredRole");
-const checkSelfOrAdmin = require("../middlewares/checkSelfOrAdmin");
 const { getAllRatingSchema, getRatingSchema, createRatingSchema, updateRatingSchema } = require("../models/rating.model");
 
 async function rating(fastify) {
@@ -50,7 +49,7 @@ async function rating(fastify) {
 
     fastify.put(
         "/rating/:id",
-        { schema: updateRatingSchema, preHandler: checkSelfOrAdmin()},
+        { schema: updateRatingSchema},
         async (request, reply) => {
             const {  rating_value } = request.body;
             const rating = await ratingController.updateRating(request.params.id, rating_value);
