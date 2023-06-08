@@ -4,17 +4,24 @@ class CategorieController {
     }
 
     async getAllCategorie() {
-        const { rows } = await this.client.query('SELECT * FROM categorie ORDER BY id ASC');
-        return rows;
+        const { rows } = await this.client.query(`WITH RECURSIVE category_tree AS (
+            SELECT id, name, id_category_parent, 0 as level
+            FROM categorie
+            WHERE id_category_parent IS NULL
+            UNION ALL
+            SELECT c.id, c.name, c.id_category_parent, ct.level + 1 as level
+            FROM categorie c
+            JOIN category_tree ct ON c.id_category_parent = ct.id
+          )
+          SELECT * FROM category_tree
+          ORDER BY level, id;
+          `);
+        const categories = this.buildCategoryTree(rows);
+        return categories;
     }
 
     async getCategorie(id) {
         const { rows } = await this.client.query('SELECT * FROM categorie WHERE id=$1', [id])
-        return rows;
-    }
-
-    async getCategoryRecursive(id) {
-        const { rows } = await this.client.query('WITH RECURSIVE subcategories AS (SELECT * FROM categorie WHERE id=$1 UNION ALL SELECT c.* FROM categorie c JOIN subcategories s ON c.id_category_parent = s.id) SELECT * FROM subcategories', [id])
         return rows;
     }
 
@@ -58,6 +65,24 @@ class CategorieController {
         const  rows  = await this.client.query('DELETE FROM categorie WHERE id=$1', [id]);
         return rows.rowCount;
     }
+
+    // recursive function to build tree
+    buildCategoryTree(categories, parentId = null) {
+        const tree = [];
+      
+        categories
+        .filter(category => category.id_category_parent == parentId)
+          .forEach(category => {
+            const node = {
+              id: category.id,
+              name: category.name,
+              sub: this.buildCategoryTree(categories, category.id),
+            };
+            tree.push(node);
+          });
+      
+        return tree;
+      }
 }
 
 module.exports = CategorieController;

@@ -2,15 +2,7 @@ const getAllCategorieSchema = {
 	response: {
 		200: {
 			type: "array",
-			items: {
-				type: "object",
-				required: ["id", "name", "id_category_parent"],
-				properties: {
-					id: { type: "integer" },
-					name: { type: "string", minLength: 3, maxLength: 255 },
-					id_category_parent: { type: "integer", minimum: 1, nullable: true },
-				},
-			},
+			items: { $ref: "category"},
 		},
 	},
 };
@@ -90,9 +82,27 @@ const updateCategorieSchema = {
 	},
 };
 
-module.exports = {
-	getAllCategorieSchema,
-	getCategorieSchema,
-	createCategorieSchema,
-	updateCategorieSchema,
-};
+module.exports = function (fastify) {
+	fastify.addSchema({
+		$id: 'category',
+		type: 'object',
+		required: ['id', 'name', 'sub'],
+		properties: {
+		  id: { type: 'integer' },
+		  name: { type: 'string', minLength: 3, maxLength: 255 },
+		  sub: {
+			type: 'array',
+			nullable: true,
+			items: { $ref: 'category' }, // Reference to the same schema for nested categories
+		  },
+		},
+	  });
+  
+	return {
+	  getAllCategorieSchema,
+	  getCategorieSchema,
+	  createCategorieSchema,
+	  updateCategorieSchema,
+	};
+  };
+  
