@@ -8,11 +8,15 @@ async function comment(fastify) {
     const commentController = new CommentController(client);
     const {
         getAllCommentSchema,
+        getCommentSchema,
+        createCommentSchema,
+        updateCommentSchema,
+        getCommentByTutorialSchema
     } = createSchemas(fastify);
 	
 	fastify.get(
         "/comment",
-        // { schema: getAllCommentSchema},
+        { schema: getAllCommentSchema},
         async (request, reply) => {
 
         const comment = await commentController.getAllComment();
@@ -21,7 +25,7 @@ async function comment(fastify) {
 
     fastify.get(
         "/comment/:id",
-        // { schema: getCommentSchema},
+        { schema: getCommentSchema},
         async (request, reply) => {
             const comment = await commentController.getComment(request.params.id);
             reply.send(comment);
@@ -30,7 +34,7 @@ async function comment(fastify) {
 
     fastify.get(
         "/comment/tutorial/:id",
-        // { schema: getCommentSchema},
+        { schema: getCommentByTutorialSchema},
         async (request, reply) => {
             const comment = await commentController.getCommentByTutorial(request.params.id);
             reply.send(comment);
@@ -40,7 +44,7 @@ async function comment(fastify) {
     fastify.post(
         "/comment",
         { 
-            // schema: createCommentSchema,
+            schema: createCommentSchema,
             preHandler: requireRole(['ADMIN', 'MODERATOR', 'REDACTOR', 'USER'], client)
         },
         async (request, reply) => {
@@ -51,6 +55,25 @@ async function comment(fastify) {
             const parent = !isNaN(parent_id) ? parent_id : null;
             const comment = await commentController.createComment(id_users, id_tutorial, content, parent);
             reply.status(201);
+            reply.send(comment);
+        }
+    );
+
+    fastify.put(
+        "/comment/:id",
+        { schema: updateCommentSchema, preHandler: checkSelfOrAdmin(client) },
+        async (request, reply) => {
+            const { content } = request.body;
+            const comment = await commentController.updateComment(request.params.id, content);
+            reply.send(comment);
+        }
+    );
+
+    fastify.delete(
+        "/comment/:id",
+        { preHandler: checkSelfOrAdmin(client) },
+        async (request, reply) => {
+            const comment = await commentController.deleteComment(request.params.id);
             reply.send(comment);
         }
     );
