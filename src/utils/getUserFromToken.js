@@ -9,6 +9,7 @@ function getUserFromToken(tokenRaw) {
 			isAuthenticated: true,
 			role: decoded.role,
 			id: decoded.id,
+			token: token,
 		};
 	} catch (err) {
 		// TODO remove console.error

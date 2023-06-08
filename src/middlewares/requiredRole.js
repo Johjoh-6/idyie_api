@@ -3,9 +3,16 @@ const getUserFromToken = require("../utils/getUserFromToken");
 
 const requireRole = (requiredRoles, client ) => {
 	return async (request, reply) => {
-	  const token = request.headers.authorization;
-	  const { isAuthenticated, role, id } = getUserFromToken(token);
+	  const rawToken = request.headers.authorization;
+	  const { isAuthenticated, role, id, token } = getUserFromToken(rawToken);
   
+	  const tokenInDB = await client.query("SELECT * FROM jwt_tokens WHERE token = $1", [token]);
+	  if (tokenInDB.rowCount === 0) {
+		return reply.code(401).send({ error: "Unauthorized" });
+	  }
+	  if(tokenInDB.rows[0].expires_at < Date.now()){
+		return reply.code(401).send({ error: "Token expired" });
+	  }
 	  if (!isAuthenticated) {
 		return reply.code(401).send({ error: "Unauthorized" });
 	  }
