@@ -2,8 +2,8 @@
 
 class TutorialController {
     constructor(dbClient) {
-        this.client = dbClient;
-    }
+		this.client = dbClient;
+	}
 
     async getAllTutorial() {
         const query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
@@ -18,7 +18,7 @@ class TutorialController {
             GROUP BY id_tutorial
         ) r ON t.id = r.id_tutorial`;
 
-        const { rows } = await this.client.query(query);
+        const {rows } = await this.client.query(query);
         const tutorials = rows.map((tutorial) => {
             const { id, title, content, avg_rating, view_count, durate, created_at, id_users, username, avatar, category_id, name } = tutorial;
             return {
@@ -46,8 +46,7 @@ class TutorialController {
     async getTutorial(id) {
         const query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
         u.id as "id_users", u.username, u.avatar,
-        c.id as "category_id", c.name, r.avg_rating,
-        com.commentaries
+        c.id as "category_id", c.name, r.avg_rating
         FROM tutorial t
         JOIN users u ON t.id_users = u.id
         JOIN categorie c ON t.id_category = c.id
@@ -56,18 +55,12 @@ class TutorialController {
             FROM rating
             GROUP BY id_tutorial
         ) r ON t.id = r.id_tutorial
-        LEFT JOIN (
-            SELECT id_tutorial, json_agg(json_build_object('comment_id', cm.id, 'user_id', cm.id_user, 'username', u.username, 'content', cm.content, 'created_at', cm.created_at)) as commentaries
-            FROM commentary cm
-            JOIN users u ON cm.id_user = u.id
-            GROUP BY id_tutorial
-        ) com ON t.id = com.id_tutorial
-        WHERE t.id = \$1;
- `;
+        LEFT JOIN commentary c ON t.id = c.id_tutorial
+        WHERE t.id = $1`;
 
-        const { rows } = await this.client.query(query, [id]);
+        const {rows } = await this.client.query(query, [id]);
         const tutorial = rows.map((tutorial) => {
-            const { id, title, content, avg_rating, view_count, durate, created_at, id_users, username, avatar, category_id, name,  } = tutorial;
+            const { id, title, content,avg_rating, view_count, durate, created_at, id_users, username, avatar, category_id, name } = tutorial;
             return {
                 id,
                 title,
@@ -85,7 +78,6 @@ class TutorialController {
                     id: category_id,
                     name,
                 },
-                
             };
         });
         return tutorial;
@@ -115,7 +107,7 @@ class TutorialController {
         // if success delete all rating and comment related to this tutorial
 
         const { rows } = await this.client.query(query, [id]);
-
+       
         return rows;
     }
 
