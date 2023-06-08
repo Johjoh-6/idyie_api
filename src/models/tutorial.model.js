@@ -4,7 +4,7 @@ const getAllTutorialSchema = {
             type: "array",
             items: {
                 type: "object",
-                required: ["id", "user",  "categorie", "title", "content", "view_count", "durate", "created_at" ],
+                required: ["id", "user",  "categorie", "avg_rating","title", "content", "view_count", "durate", "created_at" ],
                 properties: {
                     id: { type: "integer" },
                     user: {
@@ -24,6 +24,7 @@ const getAllTutorialSchema = {
                             name: { type: "string", minLength: 3, maxLength: 255 },
                         },
                     },
+                    avg_rating: { type: "number" },
                     title: { type: "string", minLength: 3, maxLength: 255 },
                     content: { type: "string"},
                     view_count: { type: "integer" },
@@ -48,7 +49,7 @@ const getTutorialSchema = {
             type: "array",
             items: {
                 type: "object",
-                required: ["id", "user", "categorie", "title", "content", "view_count", "durate", "created_at" ],
+                required: ["id", "user", "categorie","avg_rating", "title", "content", "view_count", "durate", "created_at" ],
                 properties: {
                     id: { type: "integer" },
                     user: {
@@ -68,6 +69,7 @@ const getTutorialSchema = {
                             name: { type: "string", minLength: 3, maxLength: 255 },
                         },
                     },
+                    avg_rating: { type: "number" },
                     title: { type: "string", minLength: 3, maxLength: 255 },
                     content: { type: "string"},
                     view_count: { type: "integer" },
