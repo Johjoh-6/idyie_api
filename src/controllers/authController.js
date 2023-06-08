@@ -62,7 +62,7 @@ class AuthController {
     }
 
 	createToken(user) {
-		const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, env.JWT_SECRET, { expiresIn: "1h" });
+		const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, env.JWT_SECRET, { expiresIn: "30days" });
 		return token;
 	}
 
