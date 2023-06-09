@@ -92,8 +92,10 @@ async function users(fastify) {
 					reply.status(400).send({ error: "Email is not valid" });
 				}
 			}
-			if (checkLenght(password, 6, 255)) {
-				reply.status(400).send({ error: "Password is too short" });
+			if (password !== "") {
+				if (!checkLenght(password, 6, 255)) {
+					reply.status(400).send({ error: "Password is too short" });
+				}
 			}
 			
 			const users = await usersController.updateUser(

@@ -16,35 +16,36 @@ class UsersController {
     }
 
     async createUser(username, f_name, l_name, email, password, role, avatar) {
-		const hashedPassword = await hashPassword(password);
+        const hashedPassword = await hashPassword(password);
         const { rows } = await this.client.query('INSERT INTO users (username, f_name, l_name, email, password, role, avatar, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW()) RETURNING *', [username, f_name, l_name, email, hashedPassword, role, avatar])
         return rows;
     }
 
     async updateUser(id, username, f_name, l_name, email, password, role, avatar) {
         const query = `
-          UPDATE users SET
+        UPDATE users SET
             username = COALESCE(\$1, username),
             f_name = COALESCE(\$2, f_name),
             l_name = COALESCE(\$3, l_name),
-            email = COALESCE(\$4, email),
-            password = COALESCE(\$5, password),
+            email = CASE WHEN \$4 = '' THEN email ELSE COALESCE(\$4, email) END,
+            password = CASE WHEN \$5 = '' THEN password ELSE COALESCE(\$5, password) END,
             role = COALESCE(\$6, role),
             avatar = COALESCE(\$7, avatar),
             updated_at = NOW()
-          WHERE id = \$8
-          RETURNING *`;
+        WHERE id = \$8
+        RETURNING *`;
+
         try {
-            const hashedPassword = await hashPassword(password);
-          const { rows } = await this.client.query(query, [username, f_name, l_name, email, hashedPassword, role, avatar, id]);
-          return rows;
+            const hashedPassword = password ? await hashPassword(password) : null;
+            const { rows } = await this.client.query(query, [username, f_name, l_name, email, hashedPassword, role, avatar, id]);
+            return rows;
         } catch (err) {
-          throw new Error(err);
+            throw new Error(err);
         }
     }
 
     async deleteUser(id) {
-        const  rows  = await this.client.query('DELETE FROM users WHERE id=$1', [id]);
+        const rows = await this.client.query('DELETE FROM users WHERE id=$1', [id]);
         return rows.rowCount;
     }
 }
