@@ -4,28 +4,27 @@ const getAllUserSchema = {
 			type: "array",
 			items: {
 				allOf: [
-				{$ref: "user"},
-				{
-					properties: {
-						role: { type: "string", enum: ["user", "moderator", "admin"] },
-						ban : { type: "boolean" },
-						created_at: { type: "string", format: "date-time" },
-						updated_at: { type: "string", format: "date-time" },
+					{ $ref: "user" },
+					{
+						properties: {
+							role: { type: "string", enum: ["user", "moderator", "admin"] },
+							ban: { type: "boolean" },
+							created_at: { type: "string", format: "date-time" },
+							updated_at: { type: "string", format: "date-time" },
+						},
+						required: ["role", "ban", "created_at", "updated_at"],
 					},
-					required: ["role", "ban", "created_at", "updated_at"],
-				},
 				],
-				}
 			},
 		},
+	},
 };
-
 
 const getUserSchema = {
 	response: {
 		200: {
 			type: "object",
-			$ref: "user"
+			$ref: "user",
 		},
 		404: {
 			type: "object",
@@ -47,19 +46,19 @@ const getUserAdminSchema = {
 	response: {
 		200: {
 			type: "object",
-			
-				allOf: [
-					{ $ref: "user" },
-					{
-					  properties: {
+
+			allOf: [
+				{ $ref: "user" },
+				{
+					properties: {
 						role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"] },
-						ban : { type: "boolean" },
+						ban: { type: "boolean" },
 						created_at: { type: "string", format: "date-time" },
 						updated_at: { type: "string", format: "date-time" },
-					  },
-					  required: ["role", "ban", "created_at", "updated_at"],
 					},
-				  ]
+					required: ["role", "ban", "created_at", "updated_at"],
+				},
+			],
 		},
 		404: {
 			type: "object",
@@ -121,8 +120,8 @@ const updateUserSchema = {
 			username: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			f_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			l_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
-			email: { type: "string", maxLength: 255, minLength: 0,nullable: true},
-			password: { type: "string", minLength: 0, maxLength: 255 , nullable: true},
+			email: { type: "string", maxLength: 255, minLength: 0, nullable: true },
+			password: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			avatar: { type: ["string", "null"], format: "uri", maxLength: 255, nullable: true },
 			role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"], nullable: true },
 			ban: { type: "boolean", nullable: true },
@@ -159,7 +158,7 @@ const updateUserSelfSchema = {
 			username: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			f_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			l_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
-			email: { type: "string", maxLength: 255, minLength: 0,nullable: true},
+			email: { type: "string", maxLength: 255, minLength: 0, nullable: true },
 			password: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			avatar: { type: ["string", "null"], format: "uri", maxLength: 255, nullable: true },
 		},
@@ -200,13 +199,13 @@ module.exports = function (fastify) {
 			email: { type: "string", format: "email", maxLength: 255 },
 			avatar: { type: ["string", "null"], format: "uri", maxLength: 255 },
 		},
-	})
+	});
 	return {
-	getAllUserSchema,
-	getUserSchema,
-	getUserAdminSchema,
-	createUserSchema,
-	updateUserSchema,
-	updateUserSelfSchema
+		getAllUserSchema,
+		getUserSchema,
+		getUserAdminSchema,
+		createUserSchema,
+		updateUserSchema,
+		updateUserSelfSchema,
 	};
 };

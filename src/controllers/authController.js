@@ -18,15 +18,19 @@ class AuthController {
 		if (!isPasswordValid) {
 			throw new Error("Invalid password");
 		}
-    
-        const { rowCount } = await this.client.query("DELETE FROM jwt_tokens WHERE user_id=$1 RETURNING *", [user.id]);
 
-        const token = this.createToken(user);
-        const expiration = new Date();
+		const { rowCount } = await this.client.query("DELETE FROM jwt_tokens WHERE user_id=$1 RETURNING *", [user.id]);
+
+		const token = this.createToken(user);
+		const expiration = new Date();
 		expiration.setDate(expiration.getDate() + 30);
-        await this.client.query("INSERT INTO jwt_tokens (user_id, token, expiration) VALUES ($1, $2, $3) RETURNING *", [user.id, token, expiration]);
-        
-        return token;
+		await this.client.query("INSERT INTO jwt_tokens (user_id, token, expiration) VALUES ($1, $2, $3) RETURNING *", [
+			user.id,
+			token,
+			expiration,
+		]);
+
+		return token;
 	}
 
 	async register(username, email, password) {
@@ -36,26 +40,32 @@ class AuthController {
 			[username, email, hashedPassword, "USER"],
 		);
 		const user = rows[0];
-        const token = this.createToken(user);
-        const expiration = new Date();
+		const token = this.createToken(user);
+		const expiration = new Date();
 		expiration.setDate(expiration.getDate() + 30);
-        await this.client.query("INSERT INTO jwt_tokens (user_id, token, expiration) VALUES ($1, $2, $3)", [user.id, token, expiration]);
+		await this.client.query("INSERT INTO jwt_tokens (user_id, token, expiration) VALUES ($1, $2, $3)", [
+			user.id,
+			token,
+			expiration,
+		]);
 
-        return token;
+		return token;
 	}
 
-    async logout(token) {
-        // delete the token from the database
-        const rows  = await this.client.query("DELETE FROM jwt_tokens WHERE token=$1", [token]);
-        if (rows.rowCount > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	async logout(token) {
+		// delete the token from the database
+		const rows = await this.client.query("DELETE FROM jwt_tokens WHERE token=$1", [token]);
+		if (rows.rowCount > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	createToken(user) {
-		const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, env.JWT_SECRET, { expiresIn: "30days" });
+		const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, env.JWT_SECRET, {
+			expiresIn: "30days",
+		});
 		return token;
 	}
 
@@ -65,11 +75,9 @@ class AuthController {
 	}
 
 	async flushAllTokens() {
-		const flush =  await this.client.query("DELETE FROM jwt_tokens RETURNING *");
+		const flush = await this.client.query("DELETE FROM jwt_tokens RETURNING *");
 		return flush.rowCount == 0;
 	}
-
-
 }
 
 module.exports = AuthController;
