@@ -62,7 +62,7 @@ async function tutorial(fastify) {
 
     fastify.put(
         "/tutorial/:id",
-        { schema: updateTutorialSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client)},
+        { schema: updateTutorialSchema, preHandler: requireRole(["ADMIN", "MODERATOR", "REDACTOR"], client)},
         async (request, reply) => {
             const { id_category, title, content, durate } = request.body;
             const existTuto = await tutorialController.getTutorial(request.params.id);
@@ -79,8 +79,13 @@ async function tutorial(fastify) {
 
     fastify.delete(
         "/tutorial/:id",
-        { preHandler: requireRole(["ADMIN", "MODERATOR"], client)},
+        { preHandler: requireRole(["ADMIN", "MODERATOR", "REDACTOR"], client)},
         async (request, reply) => {
+            const existTuto = await tutorialController.getTutorial(request.params.id);
+            const allow = checkSelf(request, existTuto.id_users, true);
+            if (!allow) {
+                reply.status(403).send({message: "You can't update this tutorial"});
+            }
             const tutorial = await tutorialController.deleteTutorial(request.params.id);
             reply.send(tutorial);
         }
