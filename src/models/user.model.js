@@ -86,12 +86,12 @@ const updateUserSchema = {
 		type: "object",
 		properties: {
 			username: { type: "string", minLength: 3, maxLength: 255 },
-			f_name: { type: "string", minLength: 1, maxLength: 255 },
-			l_name: { type: "string", minLength: 1, maxLength: 255 },
+			f_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
+			l_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			email: { type: "string", format: "email", maxLength: 255 },
 			password: { type: "string", minLength: 6, maxLength: 255 },
-			avatar: { type: ["string", "null"], format: "uri", maxLength: 255 },
-			role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"] },
+			avatar: { type: ["string", "null"], format: "uri", maxLength: 255, nullable: true },
+			role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"], nullable: true },
 		},
 	},
 	response: {
