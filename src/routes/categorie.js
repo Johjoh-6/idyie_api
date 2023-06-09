@@ -24,14 +24,6 @@ async function categorie(fastify) {
 	);
 
     fastify.get(
-        "/categorie_recursive/:id",
-        async (request, reply) => {
-            const categorie = await categorieController.getCategoryRecursive(request.params.id);
-            reply.send(categorie);
-        },
-    );
-
-    fastify.get(
         "/categorie/:id",
         { schema: getCategorieSchema},
         async (request, reply) => {
@@ -66,7 +58,7 @@ async function categorie(fastify) {
     );
 
     fastify.delete(
-        "/categorie/:id", { preHandler: requireRole(['USER','ADMIN'], client) },async (request, reply) => {
+        "/categorie/:id", { preHandler: requireRole(['ADMIN'], client) },async (request, reply) => {
             const categorie = await categorieController.deleteCategorie(request.params.id);
             reply.status(204);
             reply.send(categorie);
