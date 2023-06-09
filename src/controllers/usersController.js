@@ -21,7 +21,7 @@ class UsersController {
         return rows;
     }
 
-    async updateUser(id, username, f_name, l_name, email, password, role, avatar) {
+    async updateUser(id, username, f_name, l_name, email, password, role, avatar, ban = "") {
         const query = `
         UPDATE users SET
             username = COALESCE(\$1, username),
@@ -31,13 +31,14 @@ class UsersController {
             password = CASE WHEN \$5 = '' THEN password ELSE COALESCE(\$5, password) END,
             role = COALESCE(\$6, role),
             avatar = COALESCE(\$7, avatar),
-            updated_at = NOW()
+            updated_at = NOW(),
+            ban = COALESCE(\$9, ban)
         WHERE id = \$8
         RETURNING *`;
 
         try {
             const hashedPassword = password ? await hashPassword(password) : null;
-            const { rows } = await this.client.query(query, [username, f_name, l_name, email, hashedPassword, role, avatar, id]);
+            const { rows } = await this.client.query(query, [username, f_name, l_name, email, hashedPassword, role, avatar, id, ban]);
             return rows;
         } catch (err) {
             throw new Error(err);
@@ -46,6 +47,11 @@ class UsersController {
 
     async deleteUser(id) {
         const rows = await this.client.query('DELETE FROM users WHERE id=$1', [id]);
+        return rows.rowCount;
+    }
+
+    async banUser(id) {
+        const rows = await this.client.query('UPDATE users SET ban = true WHERE id=$1 RETURNING *', [id]);
         return rows.rowCount;
     }
 }
