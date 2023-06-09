@@ -8,12 +8,21 @@
  const checkEmailAndUsername = ( client ) =>{
     return async (request, reply) => {
     const { email, username } = request.body;
+    
+    let queryEmail = 'SELECT * FROM users WHERE email = \$1';
+    const emailCheck = [email];
+    let queryUsername = 'SELECT * FROM users WHERE username = \$1';
+    const usernameCheck = [username];
     const id = request.userId;
-    const queryEmail = 'SELECT * FROM users WHERE email = \$1 AND id != \$2';
-    const queryUsername = 'SELECT * FROM users WHERE username = \$1 AND id != \$2';
-
-    const emailExist = await client.query(queryEmail, [email, id]);
-    const usernameExist = await client.query(queryUsername, [username, id]);
+    if(id){
+        queryEmail += ' AND id != \$2';
+        emailCheck.push(id);
+        queryUsername += ' AND id != \$2';
+        usernameCheck.push(id);
+    }
+    
+    const emailExist = await client.query(queryEmail, emailCheck);
+    const usernameExist = await client.query(queryUsername, usernameCheck);
 
     if (emailExist.rows.length > 0) {
         reply.status(400).send({ error: "Email already used" });
