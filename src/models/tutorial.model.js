@@ -84,13 +84,11 @@ const getTutorialSchema = {
 const createTutorialSchema = {
     body: {
         type: "object",
-        required: ["id_users", "id_category", "title", "content", "view_count", "durate" ],
+        required: [ "id_category", "title", "content", "durate" ],
         properties: {
-            id_users: { type: "integer" },
             id_category: { type: "integer" },
             title: { type: "string", minLength: 3, maxLength: 255 },
             content: { type: "string"},
-            view_count: { type: "integer" },
             durate: { type: "integer" }
         },
     },
@@ -122,14 +120,11 @@ const updateTutorialSchema = {
     },
     body: {
         type: "object",
-        required: ["id_users", "id_category", "title", "content", "view_count", "durate" ],
         properties: {
-            id_users: { type: "integer" },
-            id_category: { type: "integer" },
-            title: { type: "string", minLength: 3, maxLength: 255 },
-            content: { type: "string"},
-            view_count: { type: "integer" },
-            durate: { type: "integer" }
+            id_category: { type: "integer", nullable: true },
+            title: { type: "string", minLength: 0, maxLength: 255, nullable: true },
+            content: { type: "string", minLength: 0, nullable: true },
+            durate: { type: "integer", nullable: true },
         },
     },
     response: {
