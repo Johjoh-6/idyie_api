@@ -28,6 +28,9 @@ async function categorie(fastify) {
         { schema: getCategorieSchema},
         async (request, reply) => {
             const categorie = await categorieController.getCategorie(request.params.id);
+            if(categorie === undefined) {
+                reply.status(404).send({ error: "Categorie not found" });
+            }
             reply.send(categorie);
         }
     );
@@ -60,8 +63,11 @@ async function categorie(fastify) {
     fastify.delete(
         "/categorie/:id", { preHandler: requireRole(['ADMIN'], client) },async (request, reply) => {
             const categorie = await categorieController.deleteCategorie(request.params.id);
-            reply.status(204);
-            reply.send(categorie);
+            if (!categorie) {
+                reply.status(404).send({ error: "Category not found" });
+            } else {
+                reply.status(204).send({ message: "Category deleted"});
+            }
         }
     );
 

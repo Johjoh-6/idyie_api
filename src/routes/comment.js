@@ -27,6 +27,9 @@ async function comment(fastify) {
         { schema: getCommentSchema, preHandler: requireRole(['ADMIN', 'MODERATOR'], client)},
         async (request, reply) => {
             const comment = await commentController.getComment(request.params.id);
+            if(comment === undefined) {
+				reply.status(404).send({error: "Comment not found"});
+			}
             reply.send(comment);
         }
     );
@@ -36,6 +39,9 @@ async function comment(fastify) {
         { schema: getCommentByTutorialSchema},
         async (request, reply) => {
             const comment = await commentController.getCommentByTutorial(request.params.id);
+            if(comment === undefined) {
+                reply.status(404).send({error: "Comment of this tutorial not found"});
+            }
             reply.send(comment);
         }
     );
@@ -47,14 +53,16 @@ async function comment(fastify) {
             preHandler: requireRole(['ADMIN', 'MODERATOR', 'REDACTOR', 'USER'], client)
         },
         async (request, reply) => {
+            try{
             const { id_tutorial, content, parent_id } = request.body;
             const id_users = request.userId;
-            // check if parent_id an number
-            
             const parent = !isNaN(parent_id) ? parent_id : null;
             const comment = await commentController.createComment(id_users, id_tutorial, content, parent);
             reply.status(201);
             reply.send(comment);
+        } catch (error) {
+            reply.status(400).send({ error: error.message });
+        }
         }
     );
 
@@ -64,9 +72,13 @@ async function comment(fastify) {
             preHandler: isAuthenticated(client)
         },
         async (request, reply) => {
+            try{
             const { content } = request.body;
             const comment = await commentController.updateComment(request.params.id, content);
             reply.send(comment);
+        } catch (error) {
+            reply.status(400).send({ error: error.message });
+        }
         }
     );
 
@@ -75,7 +87,11 @@ async function comment(fastify) {
         { preHandler: requireRole(['ADMIN', 'MODERATOR'], client)},
         async (request, reply) => {
             const comment = await commentController.deleteComment(request.params.id);
-            reply.send(comment);
+            if(comment === undefined) {
+                reply.status(404).send({error: "Comment not found"});
+            } else {
+            reply.status(200).send({message: "Comment deleted"});
+            }
         }
     );
 

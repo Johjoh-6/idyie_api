@@ -34,11 +34,16 @@ async function users(fastify) {
 			preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
 			const users = await usersController.getUser(request.params.id);
+			if(users === undefined) {
+				reply.status(404).send({error: "User not found"});
+			}
 			reply.send(users);
 		},
 	);
 	fastify.get("/users/me",
-		{ preHandler: isAuthenticated(client), schema: getUserSchema },
+		{ preHandler: isAuthenticated(client), 
+			schema: getUserSchema 
+		},
 		async (request, reply) => {
 			const id_user = request.userId;
 			const users = await usersController.getUser(id_user);
@@ -48,18 +53,24 @@ async function users(fastify) {
 		"/users",
 		{ schema: createUserSchema, preHandler: [requireRole(["ADMIN"], client), checkEmailAndUsername(client)] },
 		async (request, reply) => {
-			const { username, f_name, l_name, email, password, role, avatar } = request.body;
-			const users = await usersController.createUser(username, f_name, l_name, email, password, role, avatar);
-			const user = users[0];
-			reply.status(201);
-			reply.send(user);
+			try {
+				const { username, f_name, l_name, email, password, role, avatar } = request.body;
+				const users = await usersController.createUser(username, f_name, l_name, email, password, role, avatar);
+				const user = users[0];
+				reply.status(201);
+				reply.send(user);
+			} catch (error) {
+				reply.status(400).send({ error: error.message });
+			}
+			
 		},
 	);
 
 	fastify.put(
 		"/users/:id",
-		{ schema: updateUserSchema, preHandler: [requireRole(["ADMIN", "MODERATOR"], client), checkEmailAndUsername(client)] },
+		{ schema: updateUserSchema, preHandler: [requireRole(["ADMIN", "MODERATOR"], client), checkEmailAndUsername(client, true)] },
 		async (request, reply) => {
+			try {
 			const { username, f_name, l_name, email, password, role, avatar, ban } = request.body;
 
 			if (email !== "") {
@@ -87,6 +98,9 @@ async function users(fastify) {
 			const user = users[0];
 			reply.status(200);
 			reply.send(user);
+			} catch (error) {
+				reply.status(400).send({ error: error.message });
+			}
 		},
 	);
 	fastify.put("/users/me",
@@ -131,7 +145,7 @@ async function users(fastify) {
 		if (!user) {
 			reply.status(404).send({ error: "User not found" });
 		} else {
-			reply.status(204).send();
+			reply.status(204).send({ message: "User deleted"});
 		}
 	});
 
@@ -141,7 +155,9 @@ async function users(fastify) {
 		if (!user) {
 			reply.status(404).send({ error: "User not found" });
 		} else {
-			reply.status(200).send(user);
+			reply.status(200).send({
+				message: "User banned",
+			});
 		}
 	});
 }
