@@ -48,22 +48,21 @@ async function users(fastify) {
 
 	fastify.put(
 		"/users/:id",
-		{ schema: updateUserSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
+		{ schema: updateUserSchema, preHandler: [requireRole(["ADMIN", "MODERATOR"], client), checkEmailAndUsername(client)] },
 		async (request, reply) => {
 			const { username, f_name, l_name, email, password, role, avatar } = request.body;
-			if (!verifyEmail(email)) {
-				reply.status(400).send({ error: "Email is not valid" });
+
+			if (email !== "") {
+				if (!verifyEmail(email)) {
+					reply.status(400).send({ error: "Email is not valid" });
+				}
 			}
-			if (checkLenght(password, 6, 255)) {
-				reply.status(400).send({ error: "Password is too short" });
+			if (password !== "") {
+				if (!checkLenght(password, 6, 255)) {
+					reply.status(400).send({ error: "Password is too short" });
+				}
 			}
-			const { emailExist, usernameExist } = await checkEmailAndUsername(email, username, client);
-			if (emailExist) {
-				reply.status(400).send({ error: "Email already used" });
-			}
-			if (usernameExist) {
-				reply.status(400).send({ error: "Username already used" });
-			}
+			
 			const users = await usersController.updateUser(
 				request.params.id,
 				username,
