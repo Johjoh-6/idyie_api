@@ -1,4 +1,5 @@
 const CommentController = require("../controllers/commentController");
+const isAuthenticated = require("../middlewares/isAuthentificate");
 const requireRole = require("../middlewares/requiredRole");
 const createSchemas = require('../models/comment.model');
 
@@ -15,16 +16,15 @@ async function comment(fastify) {
 	
 	fastify.get(
         "/comment",
-        { schema: getAllCommentSchema},
+        { schema: getAllCommentSchema, preHandler: requireRole(['ADMIN', 'MODERATOR'], client)},
         async (request, reply) => {
-
         const comment = await commentController.getAllComment();
         reply.send(comment);
     });
 
     fastify.get(
         "/comment/:id",
-        { schema: getCommentSchema},
+        { schema: getCommentSchema, preHandler: requireRole(['ADMIN', 'MODERATOR'], client)},
         async (request, reply) => {
             const comment = await commentController.getComment(request.params.id);
             reply.send(comment);
@@ -60,7 +60,9 @@ async function comment(fastify) {
 
     fastify.put(
         "/comment/:id",
-        { schema: updateCommentSchema },
+        { schema: updateCommentSchema,
+            preHandler: isAuthenticated(client)
+        },
         async (request, reply) => {
             const { content } = request.body;
             const comment = await commentController.updateComment(request.params.id, content);
@@ -70,6 +72,7 @@ async function comment(fastify) {
 
     fastify.delete(
         "/comment/:id",
+        { preHandler: requireRole(['ADMIN', 'MODERATOR'], client)},
         async (request, reply) => {
             const comment = await commentController.deleteComment(request.params.id);
             reply.send(comment);

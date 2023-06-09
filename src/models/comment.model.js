@@ -45,18 +45,20 @@ const getCommentSchema = {
         200: {
             type: "array",
             items: {
-                type: "object",
-                $ref: "comment",
-                properties: {
-                    tutorial: {
-                        type: "object",
-                        required: ["id", "title"],
-                        properties: {
-                            id: { type: "integer", minimum: 1 },
-                            title: { type: "string" },
+                allOf: [
+                    { $ref: "comment" },
+                    {
+                      properties: {
+                        tutorial: { type: "integer" },
+                        res: {
+                          type: 'array',
+                          nullable: true,
+                          items: { $ref: 'comment' },
                         },
+                      },
+                      required: ["tutorial", "res"],
                     },
-                },
+                  ],
             },
         },
     },
