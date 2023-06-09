@@ -5,7 +5,7 @@
      * @param {string} username
      * @returns {Promise<{emailExist: Boolean, usernameExist: Boolean}>}
      */
- const checkEmailAndUsername = ( client ) =>{
+ const checkEmailAndUsername = ( client, idParams = false) =>{
     return async (request, reply) => {
     const { email, username } = request.body;
     
@@ -13,7 +13,7 @@
     const emailCheck = [email];
     let queryUsername = 'SELECT * FROM users WHERE username = \$1';
     const usernameCheck = [username];
-    const id = request.userId;
+    const id = idParams  ? request.params.id : request.userId;
     if(id){
         queryEmail += ' AND id != \$2';
         emailCheck.push(id);
