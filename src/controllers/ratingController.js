@@ -62,36 +62,6 @@ class RatingController {
         return ratings;
     }
 
-    async getRatingByTutorial(id) {
-        const query = ` SELECT r.id, r.rating_value, r.created_at,
-        u.id as "id_user", u.username, u.avatar,
-        t.id as "id_tutorial", t.title
-        FROM rating r
-        JOIN users u ON r.id_user = u.id
-        JOIN tutorial t ON r.id_tutorial = t.id
-        WHERE t.id = $1`;
-
-        const { rows } = await this.client.query(query, [id]);
-        const ratings = rows.map((rating) => {
-            const { id, value, created_at, id_user, username, avatar, id_tutorial, title } = rating;
-            return {
-                id,
-                value,
-                created_at,
-                user: {
-                    id: id_user,
-                    username,
-                    avatar,
-                },
-                tutorial: {
-                    id: id_tutorial,
-                    title,
-                },
-            };
-        });
-        return ratings;
-    }
-
     async createRating(rating_value, id_users, id_tutorial) {
         const exist = await this.client.query("SELECT * FROM rating WHERE id_user = $1 AND id_tutorial = $2", [id_users, id_tutorial]);
         if (exist.rows.length > 0) {

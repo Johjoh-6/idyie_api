@@ -25,15 +25,6 @@ async function rating(fastify) {
         }
     );
 
-    fastify.get(
-        "/rating/tutorial/:id",
-        { schema: getAllRatingSchema, preHandler: requireRole(['ADMIN', 'MODERATOR', 'REDACTOR'],  client)},
-        async (request, reply) => {
-            const rating = await ratingController.getAllRatingByTutorial(request.params.id);
-            reply.send(rating);
-        }
-    );
-
     fastify.post(
         "/rating",
         { schema: createRatingSchema, onRequest: requireRole(['ADMIN', 'MODERATOR', 'REDACTOR', 'USER'],  client)},
