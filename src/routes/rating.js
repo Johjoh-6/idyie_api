@@ -1,6 +1,7 @@
 const RatingController = require("../controllers/ratingController");
 const requireRole = require("../middlewares/requiredRole");
 const { getAllRatingSchema, getRatingSchema, createRatingSchema, updateRatingSchema } = require("../models/rating.model");
+const checkSelf = require("../utils/checkSelft");
 
 async function rating(fastify) {
 	const client = fastify.db.client;
@@ -40,9 +41,16 @@ async function rating(fastify) {
 
     fastify.put(
         "/rating/:id",
-        { schema: updateRatingSchema},
+        { schema: updateRatingSchema, 
+        preHandler: requireRole(['ADMIN', 'MODERATOR', 'REDACTOR', 'USER'],  client)
+        },
         async (request, reply) => {
             const {  rating_value } = request.body;
+            const existRating = await ratingController.getRating(request.params.id);
+            const allow = checkSelf(request, existRating.id_user);
+            if (!allow) {
+                reply.status(403).send({message: "You can't update this rating"});
+            }
             const rating = await ratingController.updateRating(request.params.id, rating_value);
             reply.status(200);
             reply.send(rating);
