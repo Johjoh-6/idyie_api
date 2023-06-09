@@ -70,7 +70,7 @@ async function auth(fastify) {
         try {
             const clear = await authController.flushExpiredTokens();
             if(!clear) {
-                reply.status(401).send({ error: "Unauthorized" });
+                reply.status(401).send({ error: "Fail to flush" });
                 return;
             }
             reply.status(200).send({ message: 'Flushed' });
@@ -83,7 +83,7 @@ async function auth(fastify) {
         try {
             const clear = await authController.flushAllTokens();
             if(!clear) {
-                reply.status(401).send({ error: "Unauthorized" });
+                reply.status(401).send({ error: "Fail to flush" });
                 return;
             }
             reply.status(200).send({ message: 'Flushed' });
