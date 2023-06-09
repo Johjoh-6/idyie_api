@@ -13,7 +13,7 @@ const middie = require('@fastify/middie');
 
 fastify.register(middie);
 fastify.register(dbconnector);
-fastify.register(route);
+fastify.register(route, { prefix: "/api" });
 fastify.register(cookiePlugin, {
     secret: env.COOKIE_SECRET,
 });
