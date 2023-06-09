@@ -1,4 +1,5 @@
 const AuthController = require("../controllers/authController");
+const checkEmailAndUsername = require("../middlewares/checkEmailAndUsername");
 const requireRole = require("../middlewares/requiredRole");
 const env = require("dotenv").config().parsed;
 
@@ -28,7 +29,7 @@ async function auth(fastify) {
 		
 	});
 
-	fastify.post("/register", async (request, reply) => {
+	fastify.post("/register", {preHandler: checkEmailAndUsername(client)},async (request, reply) => {
 		try {
 			const { username, email, password } = request.body;
 			const token = await authController.register(username, email, password);

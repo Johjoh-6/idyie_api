@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const hashPassword = require("../utils/hashPaswword");
 const env = require("dotenv").config().parsed;
-const checkEmailAndUsername = require("../utils/checkEmailAndUsername");
 
 class AuthController {
 	constructor(dbClient) {
@@ -31,14 +30,6 @@ class AuthController {
 	}
 
 	async register(username, email, password) {
-		const { emailExist, usernameExist} = await checkEmailAndUsername(email, username, this.client);
-		console.info(emailExist, usernameExist);
-		if (emailExist) {
-			throw new Error("Email already used");
-		}
-        if (usernameExist) {
-            throw new Error("Username already used");
-        }
 		const hashedPassword = await hashPassword(password);
 		const { rows } = await this.client.query(
 			"INSERT INTO users (username, email, password, role, created_at, updated_at) VALUES ($1, $2, $3, $4, NOW(), NOW()) RETURNING *",

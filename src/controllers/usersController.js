@@ -1,5 +1,4 @@
 const hashPassword = require("../utils/hashPaswword");
-const checkEmailAndUsername = require("../utils/checkEmailAndUsername");
 
 class UsersController {
     constructor(dbClient) {
@@ -17,27 +16,12 @@ class UsersController {
     }
 
     async createUser(username, f_name, l_name, email, password, role, avatar) {
-        const { emailExist, usernameExist} = await checkEmailAndUsername(email, username, this.client);
-		console.info(emailExist, usernameExist);
-		if (emailExist) {
-			throw new Error("Email already used");
-		}
-        if (usernameExist) {
-            throw new Error("Username already used");
-        }
 		const hashedPassword = await hashPassword(password);
         const { rows } = await this.client.query('INSERT INTO users (username, f_name, l_name, email, password, role, avatar, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW()) RETURNING *', [username, f_name, l_name, email, hashedPassword, role, avatar])
         return rows;
     }
 
     async updateUser(id, username, f_name, l_name, email, password, role, avatar) {
-        const { emailExist, usernameExist} = await checkEmailAndUsernamme(email, username, this.client);
-        if (emailExist) {
-            throw new Error("Email already used");
-        }
-        if (usernameExist) {
-            throw new Error("Username already used");
-        }
         const query = `
           UPDATE users SET
             username = COALESCE(\$1, username),
