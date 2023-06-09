@@ -6,16 +6,14 @@ function getUserFromToken(tokenRaw) {
 		const token = tokenRaw.replace("Bearer ", "");
 		const decoded = jwt.verify(token, env.JWT_SECRET);
 		return {
-			isAuthenticated: true,
+			authenticated: true,
 			role: decoded.role,
 			id: decoded.id,
 			token: token,
 		};
 	} catch (err) {
-		// TODO remove console.error
-		console.error(err);
 		return {
-			isAuthenticated: false,
+			authenticated: false,
 		};
 	}
 }

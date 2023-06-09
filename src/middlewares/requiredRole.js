@@ -1,36 +1,21 @@
 const UsersController = require("../controllers/usersController");
-const getUserFromToken = require("../utils/getUserFromToken");
+const isAuthenticated = require("./isAuthentificate");
 
-const requireRole = (requiredRoles, client ) => {
+const requireRole = (requiredRoles, client) => {
 	return async (request, reply) => {
-	  const rawToken = request.headers.authorization;
-	  const { isAuthenticated, role, id, token } = getUserFromToken(rawToken);
-  
-	  const tokenInDB = await client.query("SELECT * FROM jwt_tokens WHERE token = $1", [token]);
-	  if (tokenInDB.rowCount === 0) {
-		return reply.code(401).send({ error: "Unauthorized" });
-	  }
-	  if(tokenInDB.rows[0].expires_at < Date.now()){
-		return reply.code(401).send({ error: "Token expired" });
-	  }
-	  if (!isAuthenticated) {
-		return reply.code(401).send({ error: "Unauthorized" });
-	  }
-  
-	  const usersController = new UsersController(client);
-	  const user = await usersController.getUser(id);
-  
-	  if (!user || !requiredRoles.includes(role) || user.role !== role) {
-		return reply.code(403).send({ error: "Permission denied" });
-	  }
-	  if(user.role === "ADMIN"){
-		request.isAdmin = true;
-	  } else {
-		request.isAdmin = false;
-	  }
-	  request.userId = id;
+		await isAuthenticated(client)(request, reply);
+		const { roleUser, userId } = request;
+
+		const usersController = new UsersController(client);
+		const user = await usersController.getUser(userId);
+
+		if (!user || !requiredRoles.includes(roleUser) || user.role !== roleUser) {
+			return reply.code(403).send({ error: "Permission denied" });
+		}
+		request.isAdmin = user.role === "ADMIN";
+		request.isModerator = user.role === "MODERATOR";
+		request.isBan = user.ban === true;
 	};
-  };
-  
-  module.exports = requireRole;
-  
+};
+
+module.exports = requireRole;
