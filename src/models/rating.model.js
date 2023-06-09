@@ -95,6 +95,13 @@ const createRatingSchema = {
                 created_at: { type: "string", format: "date-time" },
             },
         },
+        400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
     },
 };
 
@@ -126,6 +133,13 @@ const updateRatingSchema = {
                 updated_at: { type: "string", format: "date-time" }
             },
         },
+        400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
     },
 };
 

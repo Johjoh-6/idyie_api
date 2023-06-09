@@ -61,6 +61,12 @@ const getCommentSchema = {
                   ],
             },
         },
+        404: {
+            type: "object",
+            properties: {
+                error: { type: "string" }
+            },
+        },
     },
 };
 
@@ -93,6 +99,12 @@ const getCommentByTutorialSchema = {
           ],
         },
       },
+      404: {
+        type: "object",
+        properties: {
+            error: { type: "string" }
+        },
+    },
     },
   };
   
@@ -123,6 +135,13 @@ const createCommentSchema = {
                 created_at: { type: "string", format: "date-time" },
             },
         },
+        400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
     },
 };
 
@@ -165,6 +184,13 @@ const updateCommentSchema = {
                 date: { type: "string", format: "date-time" },
             },
         },
+        400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
     }
 };
 

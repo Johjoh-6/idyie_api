@@ -78,6 +78,13 @@ const getTutorialSchema = {
                 },
             },
         },
+        404: {
+            type: "object",
+            required: ["message"],
+            properties: {
+                message: { type: "string" },
+            },
+        },
     }
 }
 
@@ -107,6 +114,13 @@ const createTutorialSchema = {
                 created_at: { type: "string", format: "date-time" }
             },
         },
+        400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
     },
 }
 
@@ -143,6 +157,13 @@ const updateTutorialSchema = {
                 update_at: { type: "string", format: "date-time" }
             },
         },
+        400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
     },
 }
 

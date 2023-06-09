@@ -28,6 +28,12 @@ const getCategorieSchema = {
 				},
 			},
 		},
+		404: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+			},
+		},
 	},
 };
 
@@ -48,6 +54,13 @@ const createCategorieSchema = {
 				id: { type: "integer" },
 				name: { type: "string", minLength: 3, maxLength: 255 },
 				id_category_parent: { type: "integer", minimum: 1, nullable: true },
+			},
+		},
+		400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
 			},
 		},
 	},
@@ -77,6 +90,13 @@ const updateCategorieSchema = {
 				id: { type: "integer" },
 				name: { type: "string", minLength: 3, maxLength: 255 },
 				id_category_parent: { type: "integer", minimum: 1, nullable: true },
+			},
+		},
+		400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
 			},
 		},
 	},

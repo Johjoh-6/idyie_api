@@ -22,18 +22,15 @@ const getAllUserSchema = {
 
 
 const getUserSchema = {
-	params: {
-		type: "object",
-		required: ["id"],
-		properties: {
-			id: { type: "integer", minimum: 1 },
-		},
-	},
 	response: {
 		200: {
-			type: "array",
-			items: {
-				$ref: "user"
+			type: "object",
+			$ref: "user"
+		},
+		404: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
 			},
 		},
 	},
@@ -64,6 +61,12 @@ const getUserAdminSchema = {
 					},
 				  ]
 		},
+		404: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+			},
+		},
 	},
 };
 
@@ -92,6 +95,13 @@ const createUserSchema = {
 				l_name: { type: "string", minLength: 1, maxLength: 255 },
 				email: { type: "string", format: "email", maxLength: 255 },
 				avatar: { type: "string", format: "uri", maxLength: 255 },
+			},
+		},
+		400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
 			},
 		},
 	},
@@ -133,6 +143,13 @@ const updateUserSchema = {
 				ban: { type: "boolean" },
 			},
 		},
+		400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
+			},
+		},
 	},
 };
 const updateUserSelfSchema = {
@@ -158,6 +175,13 @@ const updateUserSelfSchema = {
 				l_name: { type: "string", minLength: 1, maxLength: 255 },
 				email: { type: "string", format: "email", maxLength: 255 },
 				avatar: { type: ["string", "null"], format: "uri", maxLength: 255 },
+			},
+		},
+		400: {
+			type: "object",
+			properties: {
+				error: { type: "string" },
+				message: { type: "string" },
 			},
 		},
 	},
