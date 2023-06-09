@@ -8,7 +8,7 @@
  */
 const checkSelf = (request, id, allowModerator = false) => {
     const { idUser, isAdmin, isModerator } = request.user;
-    if (isAdmin || (isModerator && allowModrator)) return true;
+    if (isAdmin || (isModerator && allowModerator)) return true;
     return idUser === id;
 }
 
