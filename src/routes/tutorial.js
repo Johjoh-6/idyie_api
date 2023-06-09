@@ -1,4 +1,5 @@
 const TutorialController = require("../controllers/tutorialController");
+const isAuthenticated = require("../middlewares/isAuthentificate");
 const requireRole = require("../middlewares/requiredRole");
 const { getAllTutorialSchema, getTutorialSchema, createTutorialSchema, updateTutorialSchema } = require("../models/tutorial.model");
 const checkSelf = require("../utils/checkSelft");
@@ -28,7 +29,7 @@ async function tutorial(fastify) {
 
     fastify.get(
         "/tutorial/:id/view",
-        { preHandler: requireRole([], client)},
+        { preHandler: isAuthenticated( client)},
         async (request, reply) => {
             const tutorial = await tutorialController.addViewCount(request.params.id);
             reply.send(tutorial);
