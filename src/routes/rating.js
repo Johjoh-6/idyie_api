@@ -26,6 +26,9 @@ async function rating(fastify) {
 		{ schema: getRatingSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
 			const rating = await ratingController.getRating(request.params.id);
+			if(rating === undefined) {
+				reply.status(404).send({ message: "Rating not found" });
+			}
 			reply.send(rating);
 		},
 	);
@@ -34,12 +37,16 @@ async function rating(fastify) {
 		"/rating",
 		{ schema: createRatingSchema, onRequest: requireRole(["ADMIN", "MODERATOR", "REDACTOR", "USER"], client) },
 		async (request, reply) => {
+			try{
 			console.log("Route handler called");
 			const { id_tutorial, rating_value } = request.body;
 			const id_user = request.userId;
 			const rating = await ratingController.createRating(rating_value, id_user, id_tutorial);
 			reply.status(201);
 			reply.send(rating);
+		} catch (error) {
+			reply.status(400).send({ error: error.message });
+		}
 		},
 	);
 
@@ -47,6 +54,7 @@ async function rating(fastify) {
 		"/rating/:id",
 		{ schema: updateRatingSchema, preHandler: requireRole(["ADMIN", "MODERATOR", "REDACTOR", "USER"], client) },
 		async (request, reply) => {
+			try{
 			const { rating_value } = request.body;
 			const existRating = await ratingController.getRating(request.params.id);
 			const allow = checkSelf(request, existRating.id_user);
@@ -56,13 +64,20 @@ async function rating(fastify) {
 			const rating = await ratingController.updateRating(request.params.id, rating_value);
 			reply.status(200);
 			reply.send(rating);
+		} catch (error) {
+			reply.status(400).send({ error: error.message });
+		}
 		},
+		
 	);
 
 	fastify.delete("/rating/:id", { preHandler: requireRole(["ADMIN", "MODERATOR"], client) }, async (request, reply) => {
 		const rating = await ratingController.deleteRating(request.params.id);
-		reply.status(204);
-		reply.send(rating);
+		if (!rating) {
+			reply.status(404).send({ message: "Rating not found" });
+		} else {
+			reply.status(204).send({ message: "Rating deleted" });
+		}
 	});
 }
 
