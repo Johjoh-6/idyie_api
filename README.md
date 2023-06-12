@@ -1030,7 +1030,114 @@ Response :
 {
     [
         {
-            
-        }
+            "id": 1,
+            "user":{
+                "id": 1,
+                "username": "string",
+                "avatar": null | "string"
+            },
+            "tutorial": {
+                "id": 1,
+                "title": "string",
+                "created_at": "string",
+            },
+            "rating_value": 1,
+            "created_at": "string",
+            "updated_at": "string",
+            },
     ]
 }
+```
+> Return all ratings
+
+#### Get a rating by id
+Parameters:
+- id: number
+Response :
+- 200
+```json
+{
+    "id": 1,
+    "user":{
+        "id": 1,
+        "username": "string",
+        "avatar": null | "string"
+    },
+    "tutorial": {
+        "id": 1,
+        "title": "string",
+        "created_at": "string",
+    },
+    "rating_value": 1,
+    "created_at": "string",
+    "updated_at": "string",
+}
+```
+- 404
+```json
+{
+    "message": "Rating not found"
+}
+```
+
+#### Create a rating
+Body: 
+```json
+{
+    "id_tutorial": 1,
+    "rating_value": 1
+}
+```
+Response :
+- 201
+```json
+{
+    "id": 1,
+    "id_user": 1,
+    "id_tutorial": 1,
+    "rating_value": 1,
+    "created_at": "string",
+}
+```
+> Return the rating created
+
+- 400
+```json
+{
+  "error": "Bad Request",
+  "message": "string"
+
+}
+```
+
+#### Update a rating
+Parameters:
+- id: number
+Body: 
+```json
+{
+    "rating_value": 1
+}
+```
+Response :
+- 200
+```json
+{
+    "id": 1,
+    "id_user": 1,
+    "id_tutorial": 1,
+    "rating_value": 1,
+    "created_at": "string",
+    "updated_at": "string",
+}
+```
+> Return the rating updated
+- 400
+```json
+{
+  "error": "Bad Request",
+  "message": "string"
+
+}
+```
+
