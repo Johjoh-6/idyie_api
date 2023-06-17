@@ -4,7 +4,7 @@ const getAllRatingSchema = {
 			type: "array",
 			items: {
 				type: "object",
-				required: ["id", "user", "tutorial", "rating_value", "created_at", "updated_at"],
+				required: ["id", "user", "tutorial", "value", "created_at", "updated_at"],
 				properties: {
 					id: { type: "integer" },
 					user: {
@@ -15,19 +15,20 @@ const getAllRatingSchema = {
 							username: { type: "string", minLength: 3, maxLength: 255 },
 							avatar: { type: "string", format: "uri", maxLength: 255 },
 						},
-						tutorial: {
-							type: "object",
-							required: ["id", "title", "created_at"],
-							properties: {
-								id: { type: "integer" },
-								title: { type: "string", minLength: 3, maxLength: 255 },
-								created_at: { type: "string", format: "date-time" },
-							},
-						},
-						rating_value: { type: "integer" },
-						created_at: { type: "string", format: "date-time" },
-						updated_at: { type: "string", format: "date-time" },
 					},
+					tutorial: {
+						type: "object",
+						required: ["id", "title", "created_at"],
+						properties: {
+							id: { type: "integer" },
+							title: { type: "string", minLength: 3, maxLength: 255 },
+							created_at: { type: "string", format: "date-time" },
+						},
+					},
+					value: { type: "integer" },
+					created_at: { type: "string", format: "date-time" },
+					updated_at: { type: "string", format: "date-time" },
+
 				},
 			},
 		},
@@ -45,7 +46,7 @@ const getRatingSchema = {
 	response: {
 		200: {
 			type: "object",
-			required: ["id", "user", "tutorial", "rating_value", "created_at", "updated_at"],
+			required: ["id", "user", "tutorial", "value", "created_at", "updated_at"],
 			properties: {
 				id: { type: "integer" },
 				user: {
@@ -56,6 +57,7 @@ const getRatingSchema = {
 						username: { type: "string", minLength: 3, maxLength: 255 },
 						avatar: { type: "string", format: "uri", maxLength: 255 },
 					},
+				},
 					tutorial: {
 						type: "object",
 						required: ["id", "title", "created_at"],
@@ -65,11 +67,10 @@ const getRatingSchema = {
 							created_at: { type: "string", format: "date-time" },
 						},
 					},
-					rating_value: { type: "integer" },
+					value: { type: "integer" },
 					created_at: { type: "string", format: "date-time" },
 					updated_at: { type: "string", format: "date-time" },
 				},
-			},
 		},
 		404: {
 			type: "object",

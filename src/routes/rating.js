@@ -29,7 +29,7 @@ async function rating(fastify) {
 			if(rating === undefined) {
 				reply.status(404).send({ message: "Rating not found" });
 			}
-			reply.send(rating);
+			reply.send(rating[0]);
 		},
 	);
 
@@ -73,6 +73,7 @@ async function rating(fastify) {
 
 	fastify.delete("/rating/:id", { preHandler: requireRole(["ADMIN", "MODERATOR"], client) }, async (request, reply) => {
 		const rating = await ratingController.deleteRating(request.params.id);
+		console.log(rating);
 		if (!rating) {
 			reply.status(404).send({ message: "Rating not found" });
 		} else {

@@ -39,24 +39,28 @@ _All_ means that the route is accessible to everyone.
 _Self_ means that the route is accessible only to creator.
 
 > All the permissions return different error messages if the user is not allowed to access the route.
+
 #### Unauthenticated Error
-Response : 
+
+Response :
+
 - 401
+
 ```json
 {
-    "error": "Unauthorized"
+  "error": "Unauthorized"
 }
 ```
+
 > This error is returned when the user is not authenticated or Token is not valid
 
 ```json
 {
-    "error": "Token expired"
+  "error": "Token expired"
 }
 ```
+
 > This error is returned when the token is expired
-
-
 
 ### Auth
 
@@ -268,13 +272,17 @@ Response :
        ]
     }
 ```
+
 > Return all users
 
 #### Get a user by id
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
         {
             "id": 1,
@@ -289,17 +297,23 @@ Response :
             "updated_at": "string"
   }
 ```
+
 > Return the user
-- 404 
+
+- 404
+
 ```json
 {
-    "error": "User not found"
+  "error": "User not found"
 }
 ```
 
 #### Get the user connected
-Response : 
-- 200 
+
+Response :
+
+- 200
+
 ```json
         {
        [
@@ -314,10 +328,13 @@ Response :
        ]
     }
 ```
+
 > Return the user connected
 
 #### Create a user
-Body: 
+
+Body:
+
 ```json
 {
     "username": "string",
@@ -328,8 +345,11 @@ Body:
     "avatar": null | "string",
 }
 ```
+
 Response :
+
 - 201
+
 ```json
 {
     "id": 1,
@@ -341,21 +361,27 @@ Response :
     "avatar": null | "string",
 }
 ```
+
 > Return the user created
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
+
 > Return the error message
 
 #### Update a user
+
 Parameters:
+
 - id: number
-Body: 
+  Body:
+
 ```json
 {
     "username": "string",
@@ -368,8 +394,11 @@ Body:
     "ban": "boolean",
 }
 ```
+
 Response :
+
 - 200
+
 ```json
 {
     "id": 1,
@@ -383,25 +412,32 @@ Response :
     "ban": "boolean",
 }
 ```
+
 > Return the user updated
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
+
 > Return the error message
+
 - 404
+
 ```json
 {
-    "error": "User not found"
+  "error": "User not found"
 }
 ```
 
 #### Update the user connected
-Body: 
+
+Body:
+
 ```json
 {
     "username": "string",
@@ -412,8 +448,11 @@ Body:
     "avatar": null | "string",
 }
 ```
+
 Response :
+
 - 200
+
 ```json
 {
     "id": 1,
@@ -425,54 +464,65 @@ Response :
     "avatar": null | "string",
 }
 ```
+
 > Return the user updated
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
+
 > Return the error message
 
 #### Delete a user
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 204
+
 ```json
 {
-    "message": "User deleted"
+  "message": "User deleted"
 }
 ```
+
 > Return the message
+
 - 404
+
 ```json
 {
-    "error": "User not found"
+  "error": "User not found"
 }
 ```
 
 #### Ban a user
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
-    "message": "User banned"
+  "message": "User banned"
 }
 ```
+
 - 404
+
 ```json
 {
-    "error": "User not found"
+  "error": "User not found"
 }
 ```
-
-
-
 
 ### Categorie
 
@@ -485,8 +535,11 @@ Response :
 | /api/categorie/:id | DELETE | Delete a category    | Admin, Moderator |
 
 #### Get all categories
+
 Response :
+
 - 200
+
 ```json
 {
     [
@@ -499,38 +552,49 @@ Response :
     ]
 }
 ```
+
 > Return all categories
 
 #### Get a category by id
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
-    "id": 1,
-    "name": "string",
-    "created_at": "string",
-    "updated_at": "string"
+  "id": 1,
+  "name": "string",
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
+
 - 404
+
 ```json
 {
-    "error": "Category not found"
+  "error": "Category not found"
 }
 ```
 
 #### Create a category
-Body: 
+
+Body:
+
 ```json
 {
     "name": "string",
     "parent": null | "number"
 }
 ```
+
 Response :
+
 - 201
+
 ```json
 {
     "id": 1,
@@ -538,28 +602,36 @@ Response :
     "id_category_parent": null | "number",
 }
 ```
+
 > Return the category created
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Update a category
+
 Parameters:
+
 - id: number
-Body: 
+  Body:
+
 ```json
 {
     "name": "string",
     "parent": null | "number"
 }
 ```
+
 Response :
+
 - 200
+
 ```json
 {
     "id": 1,
@@ -567,30 +639,37 @@ Response :
     "id_category_parent": null | "number",
 }
 ```
+
 > Return the category updated
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Delete a category
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 204
+
 ```json
 {
-    "message": "Category deleted"
+  "message": "Category deleted"
 }
 ```
+
 - 404
+
 ```json
 {
-    "error": "Category not found"
+  "error": "Category not found"
 }
 ```
 
@@ -606,8 +685,11 @@ Response :
 | /api/comment/:id          | DELETE | Delete a comment              | Admin, Moderator, Self           |
 
 #### Get all comments
+
 Response :
+
 - 200
+
 ```json
 {
     [
@@ -628,13 +710,17 @@ Response :
     ]
 }
 ```
+
 > Return all comments
 
 #### Get a comment by id
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
     "id": 1,
@@ -651,18 +737,23 @@ Response :
     "date": "string"
 }
 ```
+
 - 404
+
 ```json
 {
-    "error": "Comment not found"
+  "error": "Comment not found"
 }
 ```
 
 #### Get all comments of a tutorial
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
     [
@@ -700,16 +791,21 @@ Response :
     ]
 }
 ```
+
 > Return all comments of a tutorial. The field res is an array of comments that are a response to the comment
+
 - 404
+
 ```json
 {
-    "error": "Comment of this tutorial not found"
+  "error": "Comment of this tutorial not found"
 }
 ```
 
 #### Create a comment
-Body: 
+
+Body:
+
 ```json
 {
     "content": "string",
@@ -717,39 +813,50 @@ Body:
     "id_comment_parent": null | "number"
 }
 ```
+
 Response :
+
 - 201
+
 ```json
 {
-    "id": 1,
-    "content": "string",
-    "id_tutorial": 1,
-    "id_user": 1,
-    "created_at": "string"
+  "id": 1,
+  "content": "string",
+  "id_tutorial": 1,
+  "id_user": 1,
+  "created_at": "string"
 }
 ```
+
 > Return the comment created
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Update a comment
+
 Parameters:
+
 - id: number
-Body: 
+  Body:
+
 ```json
 {
     "content": "string",
     "id_comment_parent": null | "number"
 }
 ```
+
 Response :
+
 - 200
+
 ```json
 {
     "id": 1,
@@ -763,31 +870,37 @@ Response :
     "date": "string"
 }
 ```
+
 > Return the comment updated
 
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Delete a comment
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 204
+
 ```json
 {
-    "message": "Comment deleted"
+  "message": "Comment deleted"
 }
 ```
+
 - 404
+
 ```json
 {
-    "error": "Comment not found"
+  "error": "Comment not found"
 }
 ```
 
@@ -804,8 +917,11 @@ Response :
 | /api/tutorial/:id                   | DELETE | Delete a tutorial                | Admin, Moderator, Redactor(Self) |
 
 #### Get all tutorials
+
 Response :
+
 - 200
+
 ```json
 {
     [
@@ -831,13 +947,17 @@ Response :
     ]
 }
 ```
+
 > Return all tutorials
 
 #### Get a tutorial by id
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
     "id": 1,
@@ -859,37 +979,49 @@ Response :
     "created_at": "string",
 }
 ```
+
 > Return a tutorial by id
+
 - 404
+
 ```json
 {
-    "error": "Tutorial not found"
+  "error": "Tutorial not found"
 }
 ```
 
 #### Increment the view of a tutorial
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
-    "message": "View incremented"
+  "message": "View incremented"
 }
 ```
+
 > Add 1 to the view_count of a tutorial
+
 - 404
+
 ```json
 {
-    "error": "Tutorial not found"
+  "error": "Tutorial not found"
 }
 ```
 
 #### Get all tutorials of a category
+
 Parameters:
+
 - id_category: number
-Response :
+  Response :
 - 200
+
 ```json
 {
     [
@@ -915,103 +1047,120 @@ Response :
     ]
 }
 ```
+
 > Return all tutorials of a category by id or an empty array if the category doesn't exist
 
 #### Create a tutorial
-Body: 
+
+Body:
+
 ```json
 {
-    "title": "string",
-    "content": "string",
-    "id_category": 1,
-    "durate": 1
+  "title": "string",
+  "content": "string",
+  "id_category": 1,
+  "durate": 1
 }
 ```
+
 Response :
+
 - 201
+
 ```json
 {
-    "id": 1,
-    "title": "string",
-    "content": "string",
-    "id_category": 1,
-    "durate": 1,
-    "date": "string",
-    "view_count": 1,
-    "avg_rating": 1,
-    "durate": 1,
-    "created_at": "string",
+  "id": 1,
+  "title": "string",
+  "content": "string",
+  "id_category": 1,
+  "durate": 1,
+  "date": "string",
+  "view_count": 1,
+  "avg_rating": 1,
+  "durate": 1,
+  "created_at": "string"
 }
 ```
+
 > Return the tutorial created
 
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Update a tutorial
+
 Parameters:
+
 - id: number
-Body: 
+  Body:
+
 ```json
 {
-    "title": "string",
-    "content": "string",
-    "id_category": 1,
-    "durate": 1
+  "title": "string",
+  "content": "string",
+  "id_category": 1,
+  "durate": 1
 }
 ```
+
 Response :
+
 - 200
+
 ```json
 {
-    "id": 1,
-    "title": "string",
-    "content": "string",
-    "id_category": 1,
-    "durate": 1,
-    "date": "string",
-    "view_count": 1,
-    "avg_rating": 1,
-    "durate": 1,
-    "created_at": "string",
-    "updated_at": "string",
+  "id": 1,
+  "title": "string",
+  "content": "string",
+  "id_category": 1,
+  "durate": 1,
+  "date": "string",
+  "view_count": 1,
+  "avg_rating": 1,
+  "durate": 1,
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
+
 > Return the tutorial updated
 
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Delete a tutorial
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 204
+
 ```json
 {
-    "message": "Tutorial deleted"
+  "message": "Tutorial deleted"
 }
 ```
+
 - 404
+
 ```json
 {
-    "error": "Tutorial not found"
+  "error": "Tutorial not found"
 }
 ```
-
-
 
 ### Rating
 
@@ -1024,8 +1173,11 @@ Response :
 | /api/rating/:id | DELETE | Delete a rating    | Admin, Moderator                 |
 
 #### Get all ratings
+
 Response :
+
 - 200
+
 ```json
 {
     [
@@ -1048,13 +1200,17 @@ Response :
     ]
 }
 ```
+
 > Return all ratings
 
 #### Get a rating by id
+
 Parameters:
+
 - id: number
-Response :
+  Response :
 - 200
+
 ```json
 {
     "id": 1,
@@ -1073,71 +1229,86 @@ Response :
     "updated_at": "string",
 }
 ```
+
 - 404
+
 ```json
 {
-    "message": "Rating not found"
+  "message": "Rating not found"
 }
 ```
 
 #### Create a rating
-Body: 
+
+Body:
+
 ```json
 {
-    "id_tutorial": 1,
-    "rating_value": 1
+  "id_tutorial": 1,
+  "rating_value": 1
 }
 ```
+
 Response :
+
 - 201
+
 ```json
 {
-    "id": 1,
-    "id_user": 1,
-    "id_tutorial": 1,
-    "rating_value": 1,
-    "created_at": "string",
+  "id": 1,
+  "id_user": 1,
+  "id_tutorial": 1,
+  "rating_value": 1,
+  "created_at": "string"
 }
 ```
+
 > Return the rating created
 
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
 
 #### Update a rating
+
 Parameters:
+
 - id: number
-Body: 
+Body:
+
 ```json
 {
-    "rating_value": 1
+  "rating_value": 1
 }
 ```
+
 Response :
+
 - 200
+
 ```json
 {
-    "id": 1,
-    "id_user": 1,
-    "id_tutorial": 1,
-    "rating_value": 1,
-    "created_at": "string",
-    "updated_at": "string",
+  "id": 1,
+  "id_user": 1,
+  "id_tutorial": 1,
+  "rating_value": 1,
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
+
 > Return the rating updated
+
 - 400
+
 ```json
 {
   "error": "Bad Request",
   "message": "string"
-
 }
 ```
-
