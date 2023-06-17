@@ -3,20 +3,26 @@ class TutorialController {
 		this.client = dbClient;
 	}
 
-	async getAllTutorial() {
-		const query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
-        u.id as "id_users", u.username, u.avatar,
-        c.id as "category_id", c.name, r.avg_rating
-        FROM tutorial t
-        JOIN users u ON t.id_users = u.id
-        JOIN categorie c ON t.id_category = c.id
-        LEFT JOIN (
-            SELECT id_tutorial, AVG(rating_value) as avg_rating
-            FROM rating
-            GROUP BY id_tutorial
-        ) r ON t.id = r.id_tutorial`;
+	async getAllTutorial(preference) {
+		// select 3 tutorial from the same category as the user preference
+		let query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
+		u.id as "id_users", u.username, u.avatar,
+		c.id as "category_id", c.name, r.avg_rating
+		FROM tutorial t
+		JOIN users u ON t.id_users = u.id
+		JOIN categorie c ON t.id_category = c.id
+		LEFT JOIN (
+			SELECT id_tutorial, AVG(rating_value) as avg_rating
+			FROM rating
+			GROUP BY id_tutorial
+		) r ON t.id = r.id_tutorial`;
+		const params = [];
+		if (preference) {
+			query += " WHERE c.id = $1";
+			params.push(preference);
+		}
 
-		const { rows } = await this.client.query(query);
+		const { rows } = await this.client.query(query, params);
 		const tutorials = rows.map((tutorial) => {
 			const {
 				id,
