@@ -90,8 +90,8 @@ async function users(fastify) {
 					l_name,
 					email,
 					password,
-					role,
 					avatar,
+					role,
 					ban,
 				);
 				const user = users[0];

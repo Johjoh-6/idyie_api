@@ -79,7 +79,7 @@ const createUserSchema = {
 			l_name: { type: "string", minLength: 1, maxLength: 255 },
 			email: { type: "string", format: "email", maxLength: 255 },
 			password: { type: "string", minLength: 6, maxLength: 255 },
-			avatar: { type: "string", format: "uri", maxLength: 255 },
+			avatar: { type: "string", format: "uri" },
 			role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"] },
 		},
 	},
@@ -93,7 +93,7 @@ const createUserSchema = {
 				f_name: { type: "string", minLength: 1, maxLength: 255 },
 				l_name: { type: "string", minLength: 1, maxLength: 255 },
 				email: { type: "string", format: "email", maxLength: 255 },
-				avatar: { type: "string", format: "uri", maxLength: 255 },
+				avatar: { type: "string", format: "uri" },
 			},
 		},
 		400: {
@@ -122,7 +122,7 @@ const updateUserSchema = {
 			l_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			email: { type: "string", maxLength: 255, minLength: 0, nullable: true },
 			password: { type: "string", minLength: 0, maxLength: 255, nullable: true },
-			avatar: { type: ["string", "null"], format: "uri", maxLength: 255, nullable: true },
+			avatar: { type: ["string", "null"], format: "uri", nullable: true },
 			role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"], nullable: true },
 			ban: { type: "boolean", nullable: true },
 		},
@@ -137,7 +137,7 @@ const updateUserSchema = {
 				f_name: { type: "string", minLength: 1, maxLength: 255 },
 				l_name: { type: "string", minLength: 1, maxLength: 255 },
 				email: { type: "string", format: "email", maxLength: 255 },
-				avatar: { type: ["string", "null"], format: "uri", maxLength: 255 },
+				avatar: { type: ["string", "null"], format: "uri" },
 				role: { type: "string", enum: ["USER", "REDACTOR", "MODERATOR", "ADMIN"] },
 				ban: { type: "boolean" },
 			},
@@ -160,7 +160,7 @@ const updateUserSelfSchema = {
 			l_name: { type: "string", minLength: 0, maxLength: 255, nullable: true },
 			email: { type: "string", maxLength: 255, minLength: 0, nullable: true },
 			password: { type: "string", minLength: 0, maxLength: 255, nullable: true },
-			avatar: { type: ["string", "null"], format: "uri", maxLength: 255, nullable: true },
+			avatar: { type: ["string", "null"], format: "uri", nullable: true },
 		},
 	},
 	response: {
@@ -173,7 +173,7 @@ const updateUserSelfSchema = {
 				f_name: { type: "string", minLength: 1, maxLength: 255 },
 				l_name: { type: "string", minLength: 1, maxLength: 255 },
 				email: { type: "string", format: "email", maxLength: 255 },
-				avatar: { type: ["string", "null"], format: "uri", maxLength: 255 },
+				avatar: { type: ["string", "null"], format: "uri" },
 			},
 		},
 		400: {
@@ -197,7 +197,7 @@ module.exports = function (fastify) {
 			f_name: { type: "string", minLength: 1, maxLength: 255 },
 			l_name: { type: "string", minLength: 1, maxLength: 255 },
 			email: { type: "string", format: "email", maxLength: 255 },
-			avatar: { type: ["string", "null"], format: "uri", maxLength: 255 },
+			avatar: { type: ["string", "null"], format: "uri" },
 		},
 	});
 	return {

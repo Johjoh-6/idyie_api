@@ -24,7 +24,8 @@ class UsersController {
 		return rows;
 	}
 
-	async updateUser(id, username, f_name, l_name, email, password, role, avatar, ban = "") {
+	async updateUser(id, username, f_name, l_name, email, password,  avatar,role = null, ban = null) {
+		console.log(avatar);
 		const query = `
         UPDATE users SET
             username = COALESCE(\$1, username),
@@ -32,8 +33,8 @@ class UsersController {
             l_name = COALESCE(\$3, l_name),
             email = CASE WHEN \$4 = '' THEN email ELSE COALESCE(\$4, email) END,
             password = CASE WHEN \$5 = '' THEN password ELSE COALESCE(\$5, password) END,
-            role = COALESCE(\$6, role),
-            avatar = COALESCE(\$7, avatar),
+            avatar = COALESCE(\$6, avatar),
+            role = COALESCE(\$7, role),
             updated_at = NOW(),
             ban = COALESCE(\$9, ban)
         WHERE id = \$8
@@ -47,8 +48,8 @@ class UsersController {
 				l_name,
 				email,
 				hashedPassword,
-				role,
 				avatar,
+				role,
 				id,
 				ban,
 			]);
