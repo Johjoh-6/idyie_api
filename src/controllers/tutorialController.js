@@ -27,7 +27,6 @@ class TutorialController {
 		}
 
 		const { rows } = await this.client.query(query, params);
-		console.log(rows);
 		const tutorials = this.setTutorialModel(rows);
 		return tutorials;
 	}
