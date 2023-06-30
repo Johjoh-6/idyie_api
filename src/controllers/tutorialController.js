@@ -3,7 +3,7 @@ class TutorialController {
 		this.client = dbClient;
 	}
 
-	async getAllTutorial(preference) {
+	async getAllTutorial(preference, draft) {
 		// select 3 tutorial from the same category as the user preference
 		let query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
 		u.id as "id_users", u.username, u.avatar,
@@ -15,14 +15,19 @@ class TutorialController {
 			SELECT id_tutorial, AVG(rating_value) as avg_rating
 			FROM rating
 			GROUP BY id_tutorial
-		) r ON t.id = r.id_tutorial`;
+		) r ON t.id = r.id_tutorial
+		WHERE banned = false`;
 		const params = [];
 		if (preference) {
-			query += " WHERE c.id = $1";
+			query += " AND c.id = $1";
 			params.push(preference);
+		}
+		if(draft){
+			query += " AND t.draft = false";
 		}
 
 		const { rows } = await this.client.query(query, params);
+		console.log(rows);
 		const tutorials = rows.map((tutorial) => {
 			const {
 				id,
@@ -72,7 +77,7 @@ class TutorialController {
                 FROM rating
                 GROUP BY id_tutorial
             ) r ON t.id = r.id_tutorial
-            WHERE c.id = $1`;
+            WHERE c.id = $1 AND t.draft = false AND banned = false`;
 		const { rows } = await this.client.query(query, [id_category]);
 		const tutorials = rows.map((tutorial) => {
 			const {

@@ -14,7 +14,7 @@ async function tutorial(fastify) {
 	const tutorialController = new TutorialController(client);
 
 	fastify.get("/tutorial", { schema: getAllTutorialSchema }, async (request, reply) => {
-		const tutorials = await tutorialController.getAllTutorial(request.userPreference);
+		const tutorials = await tutorialController.getAllTutorial(request.query.userPreference, request.query.draft);
 		reply.send(tutorials);
 	});
 
