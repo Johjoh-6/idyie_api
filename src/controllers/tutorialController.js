@@ -28,7 +28,7 @@ class TutorialController {
 
 		const { rows } = await this.client.query(query, params);
 		console.log(rows);
-		const tutorials = setTutorialModel(rows);
+		const tutorials = this.setTutorialModel(rows);
 		return tutorials;
 	}
 
@@ -46,7 +46,7 @@ class TutorialController {
             ) r ON t.id = r.id_tutorial
             WHERE c.id = $1 AND t.draft = false AND banned = false`;
 		const { rows } = await this.client.query(query, [id_category]);
-		const tutorials = setTutorialModel(rows);
+		const tutorials = this.setTutorialModel(rows);
 		return tutorials;
 	}
 
@@ -65,7 +65,7 @@ class TutorialController {
         WHERE t.id = $1`;
 
 		const { rows } = await this.client.query(query, [id]);
-		const tutorial = setTutorialModel(rows);
+		const tutorial = this.setTutorialModel(rows);
 		return tutorial;
 	}
 
@@ -115,7 +115,7 @@ class TutorialController {
 		) r ON t.id = r.id_tutorial
 		WHERE u.id = $1 AND t.draft = false AND banned = false`;
 		const { rows } = await this.client.query(query, [id_users]);
-		const tutorials = setTutorialModel(rows);
+		const tutorials = this.setTutorialModel(rows);
 		return tutorials;
 	}
 
