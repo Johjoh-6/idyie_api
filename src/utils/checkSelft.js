@@ -7,9 +7,9 @@
  * @returns {boolean}
  */
 const checkSelf = (request, id, allowModerator = false) => {
-	const { idUser, isAdmin, isModerator } = request.user;
+	const { userId, isAdmin, isModerator } = request;
 	if (isAdmin || (isModerator && allowModerator)) return true;
-	return idUser === id;
+	return userId === id;
 };
 
 module.exports = checkSelf;
