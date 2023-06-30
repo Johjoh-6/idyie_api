@@ -4,7 +4,7 @@ const getAllTutorialSchema = {
 			type: "array",
 			items: {
 				type: "object",
-				required: ["id", "user", "categorie", "avg_rating", "title", "content", "view_count", "durate", "created_at"],
+				required: ["id", "user", "categorie", "avg_rating", "title", "content", "view_count", "comment_count", "durate", "created_at"],
 				properties: {
 					id: { type: "integer" },
 					user: {
@@ -28,6 +28,7 @@ const getAllTutorialSchema = {
 					title: { type: "string", minLength: 3, maxLength: 255 },
 					content: { type: "string" },
 					view_count: { type: "integer" },
+					comment_count: { type: "integer" },
 					durate: { type: "integer" },
 					created_at: { type: "string", format: "date-time" },
 				},

@@ -7,7 +7,7 @@ class TutorialController {
 		// select 3 tutorial from the same category as the user preference
 		let query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
 		u.id as "id_users", u.username, u.avatar,
-		c.id as "category_id", c.name, r.avg_rating
+		c.id as "category_id", c.name, r.avg_rating, cmt.comment_count
 		FROM tutorial t
 		JOIN users u ON t.id_users = u.id
 		JOIN categorie c ON t.id_category = c.id
@@ -16,6 +16,11 @@ class TutorialController {
 			FROM rating
 			GROUP BY id_tutorial
 		) r ON t.id = r.id_tutorial
+		LEFT JOIN (
+			SELECT commentary.id_tutorial, COUNT(commentary.id) as comment_count
+			FROM commentary
+			GROUP BY commentary.id_tutorial
+		)	cmt ON t.id = cmt.id_tutorial
 		WHERE banned = false`;
 		const params = [];
 		if (preference) {
@@ -126,6 +131,7 @@ class TutorialController {
 				content,
 				avg_rating,
 				view_count,
+				comment_count,
 				durate,
 				created_at,
 				id_users,
@@ -140,6 +146,7 @@ class TutorialController {
 				content,
 				view_count,
 				avg_rating,
+				comment_count : comment_count || 0,
 				durate,
 				created_at,
 				user: {
