@@ -112,7 +112,7 @@ class TutorialController {
 			FROM rating
 			GROUP BY id_tutorial
 		) r ON t.id = r.id_tutorial
-		WHERE u.id = $1 AND t.draft = false AND banned = false`;
+		WHERE u.id = $1 AND banned = false`;
 		const { rows } = await this.client.query(query, [id_users]);
 		const tutorials = this.setTutorialModel(rows);
 		return tutorials;
