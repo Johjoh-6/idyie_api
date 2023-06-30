@@ -912,6 +912,7 @@ Parameters:
 | /api/tutorial/:id                   | GET    | Get a tutorial by id             | All                              |
 | /api/tutorial/:id/view              | GET    | Increment the view of a tutorial | All                              |
 | /api/tutorial/category/:id_category | GET    | Get all tutorial of a category   | All                              |
+| /api/tutorial/user/:id_user         | GET    | Get all tutorial of a user       | Admin, Moderator, Redactor                              |
 | /api/tutorial                       | POST   | Create a tutorial                | Admin, Moderator, Redactor       |
 | /api/tutorial/:id                   | PUT    | Update a tutorial                | Admin, Moderator, Redactor(Self) |
 | /api/tutorial/:id                   | DELETE | Delete a tutorial                | Admin, Moderator, Redactor(Self) |
@@ -1050,6 +1051,39 @@ Parameters:
 
 > Return all tutorials of a category by id or an empty array if the category doesn't exist
 
+#### Get all tutorials of a user
+Parameters:
+- id_user: number
+Response :
+- 200
+
+```json
+{
+    [
+        {
+            "id": 1,
+            "title": "string",
+            "content": "string",
+            "category": {
+                "id": 1,
+                "name": "string"
+            },
+            "user": {
+                "id": 1,
+                "username": "string",
+                "avatar": null | "string"
+            },
+            "date": "string",
+            "view_count": 1,
+            "avg_rating": 1,
+            "durate": 1,
+            "created_at": "string",
+        },
+    ]
+}
+```
+> Return all tutorials of a user by id or an empty array if the user doesn't exist
+
 #### Create a tutorial
 
 Body:
@@ -1077,7 +1111,6 @@ Response :
   "date": "string",
   "view_count": 1,
   "avg_rating": 1,
-  "durate": 1,
   "created_at": "string"
 }
 ```

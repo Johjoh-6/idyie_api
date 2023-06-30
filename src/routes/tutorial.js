@@ -39,6 +39,11 @@ async function tutorial(fastify) {
 		reply.send(tutorials);
 	});
 
+	fastify.get("/tutorial/user/:id_users", { schema: getAllTutorialSchema }, async (request, reply) => {
+		const tutorials = await tutorialController.getTutorialByUser(request.params.id_users);
+		reply.send(tutorials);
+	});
+
 	fastify.post(
 		"/tutorial",
 		{
