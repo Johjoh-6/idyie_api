@@ -48,14 +48,15 @@ const getCommentSchema = {
 					{ $ref: "comment" },
 					{
 						properties: {
-							tutorial: { type: "integer" },
-							res: {
-								type: "array",
-								nullable: true,
-								items: { $ref: "comment" },
-							},
+							tutorial: { type: "object",
+							required: ["id", "title"],
+							properties: {
+								id: { type: "integer" },
+								title: { type: "string", minLength: 3, maxLength: 255 },
+							}, 
 						},
-						required: ["tutorial", "res"],
+						},
+						required: ["tutorial"],
 					},
 				],
 			},
