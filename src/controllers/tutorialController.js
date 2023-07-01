@@ -5,7 +5,7 @@ class TutorialController {
 
 	async getAllTutorial(preference, draft) {
 		// select 3 tutorial from the same category as the user preference
-		let query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
+		let query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at, t.draft,
 		u.id as "id_users", u.username, u.avatar,
 		c.id as "category_id", c.name, r.avg_rating, cmt.comment_count
 		FROM tutorial t
@@ -139,6 +139,7 @@ class TutorialController {
 				avatar,
 				category_id,
 				name,
+				draft,
 			} = tutorial;
 			return {
 				id,
@@ -158,6 +159,7 @@ class TutorialController {
 					id: category_id,
 					name,
 				},
+				draft,
 			};
 		});
 	};

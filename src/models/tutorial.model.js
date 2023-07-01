@@ -31,6 +31,7 @@ const getAllTutorialSchema = {
 					comment_count: { type: "integer" },
 					durate: { type: "integer" },
 					created_at: { type: "string", format: "date-time" },
+					draft: { type: "boolean" },
 				},
 			},
 		},
