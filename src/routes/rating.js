@@ -29,7 +29,24 @@ async function rating(fastify) {
 			if(rating === undefined) {
 				reply.status(404).send({ message: "Rating not found" });
 			}
-			reply.send(rating[0]);
+			reply.send(rating);
+		},
+	);
+
+	fastify.get(
+		"/rating/me/:id",
+		{ 
+			schema: getRatingSchema, 
+			preHandler: requireRole(["ADMIN", "MODERATOR", "REDACTOR", "USER"], client) },
+		async (request, reply) => {
+			const id_user = request.userId;
+			console.log(request.params.id);
+			const rating = await ratingController.getRatingByTutorial(request.params.id, id_user);
+			console.log(rating)
+			if(rating === undefined) {
+				reply.status(404).send({ message: "Rating not found" });
+			}
+			reply.send(rating);
 		},
 	);
 

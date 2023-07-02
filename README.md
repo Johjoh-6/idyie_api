@@ -1201,6 +1201,7 @@ Parameters:
 | --------------- | ------ | ------------------ | -------------------------------- |
 | /api/rating     | GET    | Get all rating     | Admin, Moderator                 |
 | /api/rating/:id | GET    | Get a rating by id | Admin, Moderator                 |
+| /api/rating/me/:id | GET    | Get a rating user by id tutorial | Self |                 |
 | /api/rating     | POST   | Create a rating    | Admin, Moderator, Redactor, User |
 | /api/rating/:id | PUT    | Update a rating    | Self                             |
 | /api/rating/:id | DELETE | Delete a rating    | Admin, Moderator                 |
@@ -1242,6 +1243,39 @@ Parameters:
 
 - id: number
   Response :
+- 200
+
+```json
+{
+    "id": 1,
+    "user":{
+        "id": 1,
+        "username": "string",
+        "avatar": null | "string"
+    },
+    "tutorial": {
+        "id": 1,
+        "title": "string",
+        "created_at": "string",
+    },
+    "rating_value": 1,
+    "created_at": "string",
+    "updated_at": "string",
+}
+```
+
+- 404
+
+```json
+{
+  "message": "Rating not found"
+}
+```
+
+#### Get a rating user by id tutorial
+Parameters:
+- id: number
+Response :
 - 200
 
 ```json
