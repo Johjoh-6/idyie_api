@@ -69,7 +69,7 @@ async function tutorial(fastify) {
 		{ schema: updateTutorialSchema, preHandler: requireRole(["ADMIN", "MODERATOR", "REDACTOR"], client) },
 		async (request, reply) => {
 			try {
-				const { id_category, title, content, durate } = request.body;
+				const { id_category, title, content, durate, draft } = request.body;
 				const existTuto = await tutorialController.getTutorial(request.params.id);
 				const allow = checkSelf(request, existTuto.id_users, true);
 				if (!allow) {
@@ -82,6 +82,7 @@ async function tutorial(fastify) {
 					title,
 					content,
 					durate,
+					draft,
 				);
 				const tutorials = tutorial[0];
 				reply.send(tutorials);

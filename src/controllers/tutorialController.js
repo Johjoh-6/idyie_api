@@ -55,7 +55,7 @@ class TutorialController {
 	}
 
 	async getTutorial(id) {
-		const query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,
+		const query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at, t.draft,
         u.id as "id_users", u.username, u.avatar,
         c.id as "category_id", c.name, r.avg_rating
         FROM tutorial t
@@ -80,14 +80,15 @@ class TutorialController {
 		return rows;
 	}
 
-	async updateTutorial(id, id_category, title, content, durate) {
+	async updateTutorial(id, id_category, title, content, durate, draft = "") {
 		const query = `UPDATE tutorial SET 
         id_category = COALESCE(\$1, id_category), 
         title = COALESCE(\$2,title), 
         content = COALESCE(\$3, content), 
         durate = COALESCE(\$4, durate),
-        updated_at = NOW() WHERE id = $5 RETURNING *`;
-		const { rows } = await this.client.query(query, [id_category, title, content, durate, id]);
+        updated_at = NOW(),
+		draft = COALESCE(\$5, draft) WHERE id = $6 RETURNING *`;
+		const { rows } = await this.client.query(query, [id_category, title, content, durate, draft, id]);
 		return rows;
 	}
 
