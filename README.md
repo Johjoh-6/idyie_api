@@ -249,7 +249,10 @@ Response :
 | /users/:id/ban | PUT    | Ban a user                             | Admin, Moderator |
 
 #### Get all users
-
+Parameters:
+pageNumber: number
+limit: number
+order: ASC | DESC
 Response :
 
 - 200
@@ -685,7 +688,9 @@ Parameters:
 | /api/comment/:id          | DELETE | Delete a comment              | Admin, Moderator, Self           |
 
 #### Get all comments
-
+Parameters:
+pageNumber: number
+limit: number
 Response :
 
 - 200
@@ -918,7 +923,11 @@ Parameters:
 | /api/tutorial/:id                   | DELETE | Delete a tutorial                | Admin, Moderator, Redactor(Self) |
 
 #### Get all tutorials
-
+Parameters:
+pageNumber: number
+limit: number
+order: ASC | DESC
+draft: boolean
 Response :
 
 - 200
