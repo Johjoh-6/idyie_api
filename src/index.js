@@ -2,7 +2,8 @@ const envToLogger = require("./utils/logger");
 const env = require("dotenv").config().parsed;
 
 const fastify = require("fastify")({
-	logger: envToLogger[env.ENV] ?? true, // defaults to true if no entry matches in the map
+	logger: envToLogger[env.ENV] ?? true,
+	pluginTimeout: 10000, // defaults to true if no entry matches in the map
 });
 
 const dbconnector = require("./db");
