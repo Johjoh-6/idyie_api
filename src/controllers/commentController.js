@@ -3,8 +3,8 @@ class CommentController {
 		this.client = dbClient;
 	}
 
-	async getAllComment() {
-		const query = `
+	async getAllComment(pageNumber, limit=25) {
+		let query = `
         SELECT c.id, c.content, 
         CASE
           WHEN c.created_at > c.updated_at THEN c.created_at
@@ -14,7 +14,15 @@ class CommentController {
         t.id as "id_tutorial", t.title
         FROM commentary c
         JOIN users u ON c.id_user = u.id
-        JOIN tutorial t ON c.id_tutorial = t.id`;
+        JOIN tutorial t ON c.id_tutorial = t.id
+		ORDER BY date DESC`;
+		const params = [];
+		if(limit && pageNumber){
+			const offset = (pageNumber - 1) * limit;
+			query += ` ORDER BY t.created_at ${order} LIMIT \$1 OFFSET \$2`;
+			params.push(limit);
+			params.push(offset);
+		}
 
 		const { rows } = await this.client.query(query);
 		const comments = rows.map((comment) => {

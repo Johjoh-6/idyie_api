@@ -18,7 +18,8 @@ async function comment(fastify) {
 		"/comment",
 		{ schema: getAllCommentSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
-			const comment = await commentController.getAllComment();
+			const { limit, pageNumber } = request.query;
+			const comment = await commentController.getAllComment(pageNumber, limit);
 			reply.send(comment);
 		},
 	);

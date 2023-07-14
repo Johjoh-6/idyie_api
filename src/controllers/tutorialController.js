@@ -3,8 +3,7 @@ class TutorialController {
 		this.client = dbClient;
 	}
 
-	async getAllTutorial(preference, draft) {
-		// select 3 tutorial from the same category as the user preference
+	async getAllTutorial( pageNumber, draft = false, limit = 25 , order = 'DESC') {
 		let query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at, t.draft,
 		u.id as "id_users", u.username, u.avatar,
 		c.id as "category_id", c.name, r.avg_rating, cmt.comment_count
@@ -23,18 +22,21 @@ class TutorialController {
 		)	cmt ON t.id = cmt.id_tutorial
 		WHERE banned = false`;
 		const params = [];
-		if (preference) {
-			query += " AND c.id = $1";
-			params.push(preference);
-		}
 		if(draft){
 			query += " AND t.draft = false";
 		}
-
+		if(limit && pageNumber){
+			const offset = (pageNumber - 1) * limit;
+			query += ` ORDER BY t.created_at ${order} LIMIT \$1 OFFSET \$2`;
+			params.push(limit);
+			params.push(offset);
+		}
+	
 		const { rows } = await this.client.query(query, params);
 		const tutorials = this.setTutorialModel(rows);
 		return tutorials;
 	}
+	
 
 	async getTutorialByCategory(id_category) {
 		const query = `SELECT t.id, t.title, t.content, t.view_count, t.durate, t.created_at,

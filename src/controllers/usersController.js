@@ -5,8 +5,16 @@ class UsersController {
 		this.client = dbClient;
 	}
 
-	async getAllUsers() {
-		const { rows } = await this.client.query("SELECT * FROM users ORDER BY id ASC");
+	async getAllUsers(pageNumber, limit =25, order = 'DESC') {
+		let query = "SELECT * FROM users";
+		const params = [];
+		if(limit && pageNumber){
+			const offset = (pageNumber - 1) * limit;
+			query += ` ORDER BY u.created_at ${order} LIMIT \$1 OFFSET \$2`;
+			params.push(limit);
+			params.push(offset);
+		}
+		const { rows } = await this.client.query();
 		return rows;
 	}
 

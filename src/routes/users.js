@@ -22,7 +22,8 @@ async function users(fastify) {
 		"/users",
 		{ schema: getAllUserSchema, preHandler: requireRole(["ADMIN", "MODERATOR"], client) },
 		async (request, reply) => {
-			const users = await usersController.getAllUsers();
+			const { limit, pageNumber, order } = request.query;
+			const users = await usersController.getAllUsers( pageNumber, limit, order);
 			reply.send(users);
 		},
 	);
