@@ -14,7 +14,7 @@ class UsersController {
 			params.push(limit);
 			params.push(offset);
 		}
-		const { rows } = await this.client.query();
+		const { rows } = await this.client.query(query, params);
 		return rows;
 	}
 
