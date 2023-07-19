@@ -78,7 +78,7 @@ async function users(fastify) {
 						reply.status(400).send({ error: "Email is not valid" });
 					}
 				}
-				if (password !== "") {
+				if (password) {
 					if (!checkLenght(password, 6, 255)) {
 						reply.status(400).send({ error: "Password is too short" });
 					}

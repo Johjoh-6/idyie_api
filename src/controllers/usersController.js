@@ -33,7 +33,6 @@ class UsersController {
 	}
 
 	async updateUser(id, username, f_name, l_name, email, password,  avatar,role = null, ban = null) {
-		console.log(avatar);
 		const query = `
         UPDATE users SET
             username = COALESCE(\$1, username),

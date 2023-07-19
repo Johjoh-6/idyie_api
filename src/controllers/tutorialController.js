@@ -82,7 +82,7 @@ class TutorialController {
 		return rows;
 	}
 
-	async updateTutorial(id, id_category, title, content, durate, draft = "") {
+	async updateTutorial(id, id_category, title, content, durate, draft = false) {
 		const query = `UPDATE tutorial SET 
         id_category = COALESCE(\$1, id_category), 
         title = COALESCE(\$2,title), 
